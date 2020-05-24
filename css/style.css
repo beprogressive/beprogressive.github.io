@@ -28,7 +28,7 @@ a {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 30%;
+  width: 50%;
 }
 
 h1, h2, h3, h4, h5,
@@ -110,7 +110,7 @@ h1, h2, h3, h4, h5,
 .site-section-heading h2 {
   position: relative;
   font-size: 2.5rem;
-  color: #fff;
+  color: #222;
   padding-bottom: 30px; }
   @media (min-width: 768px) {
     .site-section-heading h2 {
@@ -127,8 +127,9 @@ h1, h2, h3, h4, h5,
     background: -o-linear-gradient(left, #c70039, #ff5733 70%);
     background: linear-gradient(to right, #c70039, #ff5733 70%); }
     @media (min-width: 992px) {
-      .site-section-heading h2:after {
-        left: -20%; } }
+      /* .site-section-heading h2:after {
+        left: -20%; }  */
+      }
   .site-section-heading h2.text-center:after {
     content: "";
     -webkit-transform: translateX(-50%);
