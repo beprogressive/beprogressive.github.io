@@ -82,14 +82,21 @@
 
         .brand-mark {
             align-items: center;
-            background: var(--ink);
-            border-radius: 6px;
-            color: var(--surface);
+            background: #303743;
+            border-radius: 8px;
             display: inline-flex;
-            font-size: 14px;
             height: 34px;
             justify-content: center;
+            overflow: hidden;
+            padding: 4px;
             width: 34px;
+        }
+
+        .brand-mark img {
+            height: 100%;
+            object-fit: contain;
+            transform: scale(1.24);
+            width: 100%;
         }
 
         .nav-links {
@@ -247,6 +254,13 @@
 
         .orbit-tile:nth-child(3) {
             background: #f8f6ff;
+        }
+
+        .orbit-tile .brand-mark {
+            border-radius: 18px;
+            height: 122px;
+            padding: 10px;
+            width: 122px;
         }
 
         .hero-note {
@@ -555,7 +569,9 @@
     <header class="site-header">
         <div class="page-shell nav">
             <a class="brand" href="#top" aria-label="beProgressive home">
-                <span class="brand-mark" aria-hidden="true">bp</span>
+                <span class="brand-mark" aria-hidden="true">
+                    <img src="resources/beProgressive_logo_1000.png" alt="">
+                </span>
                 <span>beProgressive</span>
             </a>
             <nav class="nav-links" aria-label="Primary navigation">
@@ -593,7 +609,9 @@
                         <img src="resources/Codictio_logo_vector.svg" alt="Codictio logo">
                     </div>
                     <div class="orbit-tile">
-                        <span class="brand-mark" aria-hidden="true">bp</span>
+                        <span class="brand-mark" aria-hidden="true">
+                            <img src="resources/beProgressive_logo_1000.png" alt="">
+                        </span>
                     </div>
                 </div>
                 <div class="hero-note">
