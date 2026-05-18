@@ -365,9 +365,63 @@
         }
 
         .card-links {
+            align-items: center;
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
+        }
+
+        .platform-link {
+            align-items: center;
+            background: #111827;
+            border: 1px solid #111827;
+            border-radius: 8px;
+            color: #ffffff;
+            display: inline-flex;
+            font-size: 14px;
+            font-weight: 760;
+            gap: 10px;
+            min-height: 42px;
+            padding: 9px 13px;
+            transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+        }
+
+        .platform-link:hover,
+        .platform-link:focus-visible {
+            background: #1f2937;
+            border-color: #1f2937;
+            outline: none;
+            transform: translateY(-1px);
+        }
+
+        .platform-link.google-play {
+            background: #ffffff;
+            border-color: #d0d5dd;
+            color: #1f2933;
+        }
+
+        .platform-link.google-play:hover,
+        .platform-link.google-play:focus-visible {
+            background: #f9fafb;
+            border-color: #b7bec8;
+        }
+
+        .platform-link.website {
+            background: #f4f0e8;
+            border-color: #d8d1c4;
+            color: var(--ink);
+        }
+
+        .platform-link.website:hover,
+        .platform-link.website:focus-visible {
+            background: #ffffff;
+            border-color: #bfb6a8;
+        }
+
+        .platform-icon {
+            flex: 0 0 auto;
+            height: 22px;
+            width: 22px;
         }
 
         .text-link {
@@ -587,7 +641,15 @@
                         <span class="tag">AI assist</span>
                     </div>
                     <div class="card-links">
-                        <a class="text-link" href="https://play.google.com/store/apps/details?id=com.gmail.beprogressive.it.nochaos" target="_blank" rel="noopener noreferrer">Google Play</a>
+                        <a class="platform-link google-play" href="https://play.google.com/store/apps/details?id=com.gmail.beprogressive.it.nochaos" target="_blank" rel="noopener noreferrer" aria-label="Open No Chaos on Google Play">
+                            <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <path fill="#00A173" d="M3.4 2.3c-.26.28-.4.7-.4 1.23v16.94c0 .53.14.95.4 1.23l.08.07 9.5-9.5v-.54l-9.5-9.5-.08.07Z"></path>
+                                <path fill="#F9C03D" d="m16.13 15.43-3.15-3.16v-.54l3.15-3.16.07.04 3.73 2.12c1.07.61 1.07 1.61 0 2.22l-3.73 2.12-.07.04Z"></path>
+                                <path fill="#3B82F6" d="M16.2 15.07 12.98 11.84 3.4 21.7c.41.43 1.08.48 1.84.05l10.96-6.68Z"></path>
+                                <path fill="#EF4444" d="M16.2 8.93 5.24 2.25c-.76-.43-1.43-.38-1.84.05l9.58 9.86 3.22-3.23Z"></path>
+                            </svg>
+                            <span>Google Play</span>
+                        </a>
                         <a class="text-link" href="https://no-chaos.app" target="_blank" rel="noopener noreferrer">Website</a>
                     </div>
                 </article>
@@ -607,7 +669,13 @@
                         <span class="tag">LLM cleanup</span>
                     </div>
                     <div class="card-links">
-                        <a class="text-link" href="https://github.com/beprogressive/Codictio" target="_blank" rel="noopener noreferrer">Repository</a>
+                        <a class="platform-link website" href="https://codictio.pages.dev/" target="_blank" rel="noopener noreferrer" aria-label="Open Codictio website">
+                            <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" d="M3.5 12a8.5 8.5 0 1 0 17 0 8.5 8.5 0 0 0-17 0Z"></path>
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" d="M4 12h16M12 3.5c2.2 2.2 3.3 5.03 3.3 8.5S14.2 18.3 12 20.5C9.8 18.3 8.7 15.47 8.7 12S9.8 5.7 12 3.5Z"></path>
+                            </svg>
+                            <span>Website</span>
+                        </a>
                     </div>
                 </article>
 
@@ -626,7 +694,12 @@
                         <span class="tag">Lightweight</span>
                     </div>
                     <div class="card-links">
-                        <a class="text-link" href="https://github.com/beprogressive/isConnected" target="_blank" rel="noopener noreferrer">Repository</a>
+                        <a class="platform-link github" href="https://github.com/beprogressive/isConnected" target="_blank" rel="noopener noreferrer" aria-label="Open isConnected repository on GitHub">
+                            <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.11.79-.25.79-.56v-2.1c-3.22.7-3.9-1.37-3.9-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.78 1.2 1.78 1.2 1.04 1.77 2.72 1.26 3.38.96.11-.75.41-1.26.74-1.55-2.57-.29-5.27-1.29-5.27-5.73 0-1.27.45-2.3 1.2-3.11-.12-.29-.52-1.47.11-3.07 0 0 .98-.31 3.17 1.19a10.93 10.93 0 0 1 5.78 0c2.2-1.5 3.17-1.19 3.17-1.19.63 1.6.23 2.78.11 3.07.75.81 1.2 1.84 1.2 3.11 0 4.45-2.71 5.43-5.29 5.72.42.36.79 1.07.79 2.16v3.12c0 .31.21.68.8.56A11.5 11.5 0 0 0 12 .5Z"></path>
+                            </svg>
+                            <span>GitHub</span>
+                        </a>
                     </div>
                 </article>
             </div>
