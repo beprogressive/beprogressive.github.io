@@ -3,122 +3,725 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>beProgressive - Software Development, Web Services, AI Automation</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta name="description" content="beProgressive portfolio: software, Windows utilities, Android apps, AI-assisted tools, and contact links.">
+    <title>beProgressive - Portfolio</title>
     <style>
+        :root {
+            color-scheme: light;
+            --bg: #fbfaf7;
+            --surface: #ffffff;
+            --surface-soft: #f4f0e8;
+            --ink: #1f2933;
+            --muted: #667085;
+            --line: #e5e1d8;
+            --blue: #2563eb;
+            --green: #12805c;
+            --rose: #b34d64;
+            --shadow: 0 18px 45px rgba(31, 41, 51, 0.08);
+            --radius: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background:
+                linear-gradient(180deg, rgba(244, 240, 232, 0.72) 0, rgba(251, 250, 247, 0) 420px),
+                var(--bg);
+            color: var(--ink);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            line-height: 1.6;
         }
-        .hero-bg {
-            background-color: #1a202c; /* Dark background */
+
+        a {
+            color: inherit;
+            text-decoration: none;
         }
-        .section-bg {
-            background-color: #2d3748; /* Slightly lighter dark */
+
+        img {
+            display: block;
+            max-width: 100%;
         }
-        .card-bg {
-            background-color: #4a5568; /* Even lighter dark for cards */
+
+        .page-shell {
+            margin: 0 auto;
+            max-width: 1120px;
+            padding: 0 24px;
         }
-        .accent-color {
-            color: #63b3ed; /* Blue accent */
+
+        .site-header {
+            backdrop-filter: blur(18px);
+            background: rgba(251, 250, 247, 0.84);
+            border-bottom: 1px solid rgba(229, 225, 216, 0.82);
+            position: sticky;
+            top: 0;
+            z-index: 20;
         }
-        .accent-bg {
-            background-color: #63b3ed;
+
+        .nav {
+            align-items: center;
+            display: flex;
+            gap: 24px;
+            justify-content: space-between;
+            min-height: 72px;
         }
-        .hover-accent-bg:hover {
-            background-color: #4299e1; /* Darker blue on hover */
+
+        .brand {
+            align-items: center;
+            display: inline-flex;
+            font-weight: 760;
+            gap: 10px;
+            letter-spacing: 0;
+        }
+
+        .brand-mark {
+            align-items: center;
+            background: var(--ink);
+            border-radius: 6px;
+            color: var(--surface);
+            display: inline-flex;
+            font-size: 14px;
+            height: 34px;
+            justify-content: center;
+            width: 34px;
+        }
+
+        .nav-links {
+            align-items: center;
+            display: flex;
+            gap: 4px;
+        }
+
+        .nav-links a {
+            border-radius: 999px;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 650;
+            padding: 8px 12px;
+        }
+
+        .nav-links a:hover,
+        .nav-links a:focus-visible {
+            background: var(--surface-soft);
+            color: var(--ink);
+            outline: none;
+        }
+
+        .hero {
+            display: grid;
+            gap: 48px;
+            grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+            padding: 68px 0 58px;
+        }
+
+        .eyebrow {
+            color: var(--green);
+            font-size: 13px;
+            font-weight: 760;
+            letter-spacing: 0.08em;
+            margin: 0 0 18px;
+            text-transform: uppercase;
+        }
+
+        h1,
+        h2,
+        h3,
+        p {
+            margin-top: 0;
+        }
+
+        h1 {
+            font-size: clamp(42px, 5.9vw, 68px);
+            letter-spacing: 0;
+            line-height: 1;
+            margin-bottom: 22px;
+            max-width: 780px;
+        }
+
+        .lead {
+            color: #475467;
+            font-size: clamp(18px, 2.2vw, 22px);
+            max-width: 680px;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        .button {
+            align-items: center;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            display: inline-flex;
+            font-weight: 720;
+            gap: 10px;
+            justify-content: center;
+            min-height: 46px;
+            padding: 11px 18px;
+            transition: background 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+        }
+
+        .button:hover,
+        .button:focus-visible {
+            transform: translateY(-1px);
+            outline: none;
+        }
+
+        .button-primary {
+            background: var(--ink);
+            border-color: var(--ink);
+            color: var(--surface);
+        }
+
+        .button-primary:hover,
+        .button-primary:focus-visible {
+            background: #111827;
+        }
+
+        .button-secondary {
+            background: rgba(255, 255, 255, 0.72);
+            color: var(--ink);
+        }
+
+        .button-secondary:hover,
+        .button-secondary:focus-visible {
+            border-color: #c8c1b5;
+            background: var(--surface);
+        }
+
+        .hero-panel {
+            align-self: stretch;
+            background: rgba(255, 255, 255, 0.76);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 420px;
+            overflow: hidden;
+        }
+
+        .project-orbit {
+            display: grid;
+            gap: 0;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .orbit-tile {
+            align-items: center;
+            aspect-ratio: 1;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            justify-content: center;
+            min-height: 172px;
+            padding: 28px;
+        }
+
+        .orbit-tile:nth-child(odd) {
+            border-right: 1px solid var(--line);
+        }
+
+        .orbit-tile:nth-child(1) {
+            background: #173f36;
+        }
+
+        .orbit-tile img {
+            max-height: 118px;
+            object-fit: contain;
+            width: min(78%, 160px);
+        }
+
+        .orbit-tile:nth-child(2) {
+            background: #f7fbf8;
+        }
+
+        .orbit-tile:nth-child(3) {
+            background: #f8f6ff;
+        }
+
+        .hero-note {
+            padding: 24px;
+        }
+
+        .hero-note strong {
+            display: block;
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+
+        .hero-note p {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 0;
+        }
+
+        .section {
+            padding: 52px 0;
+        }
+
+        .section-heading {
+            align-items: end;
+            display: flex;
+            gap: 24px;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .section-heading h2 {
+            font-size: clamp(30px, 4vw, 46px);
+            letter-spacing: 0;
+            line-height: 1.05;
+            margin-bottom: 0;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            margin-bottom: 0;
+            max-width: 430px;
+        }
+
+        .project-grid {
+            display: grid;
+            gap: 18px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .project-card {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: 0 12px 30px rgba(31, 41, 51, 0.05);
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+            padding: 22px;
+        }
+
+        .project-logo {
+            align-items: center;
+            background: var(--surface-soft);
+            border-radius: 7px;
+            display: flex;
+            height: 104px;
+            justify-content: center;
+            margin-bottom: 20px;
+            overflow: hidden;
+            padding: 18px;
+        }
+
+        .project-logo img {
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .project-logo.no-chaos {
+            background: #173f36;
+        }
+
+        .project-logo.codictio {
+            background: #f4f2ff;
+        }
+
+        .project-logo.is-connected {
+            background: #eef8f1;
+        }
+
+        .project-card h3 {
+            font-size: 22px;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .project-card p {
+            color: var(--muted);
+            margin-bottom: 18px;
+        }
+
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: auto 0 20px;
+        }
+
+        .tag {
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 999px;
+            color: #475467;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 5px 9px;
+        }
+
+        .card-links {
+            align-items: center;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .platform-link {
+            align-items: center;
+            background: #111827;
+            border: 1px solid #111827;
+            border-radius: 8px;
+            color: #ffffff;
+            display: inline-flex;
+            font-size: 14px;
+            font-weight: 760;
+            gap: 10px;
+            min-height: 42px;
+            padding: 9px 13px;
+            transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+        }
+
+        .platform-link:hover,
+        .platform-link:focus-visible {
+            background: #1f2937;
+            border-color: #1f2937;
+            outline: none;
+            transform: translateY(-1px);
+        }
+
+        .platform-link.google-play {
+            background: #ffffff;
+            border-color: #d0d5dd;
+            color: #1f2933;
+        }
+
+        .platform-link.google-play:hover,
+        .platform-link.google-play:focus-visible {
+            background: #f9fafb;
+            border-color: #b7bec8;
+        }
+
+        .platform-link.website {
+            background: #f4f0e8;
+            border-color: #d8d1c4;
+            color: var(--ink);
+        }
+
+        .platform-link.website:hover,
+        .platform-link.website:focus-visible {
+            background: #ffffff;
+            border-color: #bfb6a8;
+        }
+
+        .platform-icon {
+            flex: 0 0 auto;
+            height: 22px;
+            width: 22px;
+        }
+
+        .about-band {
+            background: #edf7f2;
+            border: 1px solid #d7eadf;
+            border-radius: var(--radius);
+            display: grid;
+            gap: 28px;
+            grid-template-columns: 0.8fr 1.2fr;
+            padding: 28px;
+        }
+
+        .about-band h2 {
+            font-size: clamp(28px, 4vw, 42px);
+            line-height: 1.05;
+            margin-bottom: 0;
+        }
+
+        .about-copy {
+            color: #344054;
+            margin-bottom: 0;
+        }
+
+        .contact {
+            align-items: center;
+            border-top: 1px solid var(--line);
+            display: flex;
+            gap: 24px;
+            justify-content: space-between;
+            padding: 38px 0 54px;
+        }
+
+        .contact h2 {
+            font-size: clamp(28px, 4vw, 40px);
+            line-height: 1.06;
+            margin-bottom: 8px;
+        }
+
+        .contact p {
+            color: var(--muted);
+            margin-bottom: 0;
+        }
+
+        .contact-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .site-footer {
+            border-top: 1px solid var(--line);
+            color: var(--muted);
+            font-size: 14px;
+            padding: 24px 0;
+        }
+
+        @media (max-width: 880px) {
+            .hero,
+            .about-band {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding-top: 58px;
+            }
+
+            .hero-panel {
+                min-height: 0;
+            }
+
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .project-card {
+                min-height: 0;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .page-shell {
+                padding: 0 18px;
+            }
+
+            .nav {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 12px;
+                padding: 14px 0;
+            }
+
+            .nav-links {
+                overflow-x: auto;
+                padding-bottom: 2px;
+                width: 100%;
+            }
+
+            .nav-links a {
+                white-space: nowrap;
+            }
+
+            .hero {
+                gap: 32px;
+                padding-bottom: 48px;
+            }
+
+            .hero-actions,
+            .contact,
+            .section-heading {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .button {
+                width: 100%;
+            }
+
+            .orbit-tile {
+                min-height: 144px;
+                padding: 20px;
+            }
+
+            .contact-links {
+                justify-content: stretch;
+            }
         }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-100">
-
-    <nav class="hero-bg p-4 shadow-lg sticky top-0 z-50">
-        <div class="container mx-auto flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold accent-color">beProgressive</a>
-            <div>
-                <a href="#about" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">About</a>
-                <a href="#services" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Services</a>
-                <a href="#contact" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Contact</a>
-            </div>
-        </div>
-    </nav>
-
-    <header class="hero-bg text-white py-20 px-6">
-        <div class="container mx-auto text-center">
-            <h1 class="text-5xl font-bold mb-4">Progressive Digital Solutions.</h1>
-            <p class="text-xl mb-6">Welcome to beProgressive. If you're looking to optimize your workflows, simplify complex interactions, or leverage the power of AI, you're in the right place. I specialize in crafting innovative software, robust web services, and intelligent automation.</p>
-            <p class="text-lg mb-8">Let's build something impactful together.</p>
-            <a href="#contact" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300">Get in Touch</a>
+<body>
+    <header class="site-header">
+        <div class="page-shell nav">
+            <a class="brand" href="#top" aria-label="beProgressive home">
+                <span class="brand-mark" aria-hidden="true">bp</span>
+                <span>beProgressive</span>
+            </a>
+            <nav class="nav-links" aria-label="Primary navigation">
+                <a href="#projects">Projects</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </nav>
         </div>
     </header>
 
-    <section id="about" class="py-16 section-bg px-6">
-        <div class="container mx-auto">
-            <h2 class="text-3xl font-bold text-center mb-12 accent-color">A Little About Me</h2>
-            <div class="max-w-3xl mx-auto bg-gray-800 p-8 rounded-lg shadow-xl">
-                <p class="text-lg text-gray-300 leading-relaxed">
-                    I am a passionate developer with experience in creating diverse software solutions. My focus is on transforming complex challenges into elegant and efficient products.
-                    I constantly explore new technologies and approaches, especially in web development and artificial intelligence, to offer the most modern and progressive solutions.
-                    If you're looking for a specialist to help bring your ideas to life, you've come to the right place!
+    <main id="top">
+        <section class="page-shell hero" aria-labelledby="hero-title">
+            <div>
+                <p class="eyebrow">Software, utilities, calm product thinking</p>
+                <h1 id="hero-title">Small tools for clearer everyday workflows.</h1>
+                <p class="lead">
+                    I build practical apps and services that reduce friction: focused Android tools,
+                    native Windows utilities, and AI-assisted software that keeps user intent intact.
+                </p>
+                <div class="hero-actions">
+                    <a class="button button-primary" href="#projects">View projects</a>
+                    <a class="button button-secondary" href="mailto:remie.lk@gmail.com">Email me</a>
+                </div>
+            </div>
+
+            <aside class="hero-panel" aria-label="Featured project logos">
+                <div class="project-orbit">
+                    <div class="orbit-tile">
+                        <img src="resources/No_Chaos_logo_vector.svg" alt="No Chaos logo">
+                    </div>
+                    <div class="orbit-tile">
+                        <img src="resources/isConnected_logo_vector.svg" alt="isConnected logo">
+                    </div>
+                    <div class="orbit-tile">
+                        <img src="resources/Codictio_logo_vector.svg" alt="Codictio logo">
+                    </div>
+                    <div class="orbit-tile">
+                        <span class="brand-mark" aria-hidden="true">bp</span>
+                    </div>
+                </div>
+                <div class="hero-note">
+                    <strong>Designed around real constraints.</strong>
+                    <p>Lightweight, privacy-aware products with simple interfaces and a clear reason to exist.</p>
+                </div>
+            </aside>
+        </section>
+
+        <section class="page-shell section" id="projects" aria-labelledby="projects-title">
+            <div class="section-heading">
+                <h2 id="projects-title">Selected projects</h2>
+                <p>A short map of what I am building now, with links to learn more or try the product.</p>
+            </div>
+
+            <div class="project-grid">
+                <article class="project-card">
+                    <div class="project-logo no-chaos">
+                        <img src="resources/No_Chaos_logo_vector.svg" alt="" aria-hidden="true">
+                    </div>
+                    <h3>No Chaos</h3>
+                    <p>
+                        An ADHD-friendly daily routine app that shows one task at a time, supports voice capture,
+                        and turns brain dumps into organized next steps with optional AI.
+                    </p>
+                    <div class="tag-list" aria-label="No Chaos topics">
+                        <span class="tag">Android</span>
+                        <span class="tag">Productivity</span>
+                        <span class="tag">AI assist</span>
+                    </div>
+                    <div class="card-links">
+                        <a class="platform-link google-play" href="https://play.google.com/store/apps/details?id=com.gmail.beprogressive.it.nochaos" target="_blank" rel="noopener noreferrer" aria-label="Open No Chaos on Google Play">
+                            <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <path fill="#00A173" d="M3.4 2.3c-.26.28-.4.7-.4 1.23v16.94c0 .53.14.95.4 1.23l.08.07 9.5-9.5v-.54l-9.5-9.5-.08.07Z"></path>
+                                <path fill="#F9C03D" d="m16.13 15.43-3.15-3.16v-.54l3.15-3.16.07.04 3.73 2.12c1.07.61 1.07 1.61 0 2.22l-3.73 2.12-.07.04Z"></path>
+                                <path fill="#3B82F6" d="M16.2 15.07 12.98 11.84 3.4 21.7c.41.43 1.08.48 1.84.05l10.96-6.68Z"></path>
+                                <path fill="#EF4444" d="M16.2 8.93 5.24 2.25c-.76-.43-1.43-.38-1.84.05l9.58 9.86 3.22-3.23Z"></path>
+                            </svg>
+                            <span>Google Play</span>
+                        </a>
+                        <a class="platform-link website" href="https://no-chaos.app" target="_blank" rel="noopener noreferrer" aria-label="Open No Chaos website">
+                            <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" d="M3.5 12a8.5 8.5 0 1 0 17 0 8.5 8.5 0 0 0-17 0Z"></path>
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" d="M4 12h16M12 3.5c2.2 2.2 3.3 5.03 3.3 8.5S14.2 18.3 12 20.5C9.8 18.3 8.7 15.47 8.7 12S9.8 5.7 12 3.5Z"></path>
+                            </svg>
+                            <span>Website</span>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-logo codictio">
+                        <img src="resources/Codictio_logo_vector.svg" alt="" aria-hidden="true">
+                    </div>
+                    <h3>Codictio</h3>
+                    <p>
+                        A Windows dictation app that turns speech into clean structured text, removes filler words,
+                        restores punctuation, and inserts the result into the active input field.
+                    </p>
+                    <div class="tag-list" aria-label="Codictio topics">
+                        <span class="tag">Windows</span>
+                        <span class="tag">Dictation</span>
+                        <span class="tag">LLM cleanup</span>
+                    </div>
+                    <div class="card-links">
+                        <a class="platform-link website" href="https://codictio.pages.dev/" target="_blank" rel="noopener noreferrer" aria-label="Open Codictio website">
+                            <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" d="M3.5 12a8.5 8.5 0 1 0 17 0 8.5 8.5 0 0 0-17 0Z"></path>
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" d="M4 12h16M12 3.5c2.2 2.2 3.3 5.03 3.3 8.5S14.2 18.3 12 20.5C9.8 18.3 8.7 15.47 8.7 12S9.8 5.7 12 3.5Z"></path>
+                            </svg>
+                            <span>Website</span>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-logo is-connected">
+                        <img src="resources/isConnected_logo_vector.svg" alt="" aria-hidden="true">
+                    </div>
+                    <h3>isConnected</h3>
+                    <p>
+                        A lightweight Windows tray utility that checks connectivity, shows clear offline warnings,
+                        and can display current network speed without generating extra traffic.
+                    </p>
+                    <div class="tag-list" aria-label="isConnected topics">
+                        <span class="tag">Windows tray</span>
+                        <span class="tag">Network</span>
+                        <span class="tag">Lightweight</span>
+                    </div>
+                    <div class="card-links">
+                        <a class="platform-link github" href="https://github.com/beprogressive/isConnected" target="_blank" rel="noopener noreferrer" aria-label="Open isConnected repository on GitHub">
+                            <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.11.79-.25.79-.56v-2.1c-3.22.7-3.9-1.37-3.9-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.78 1.2 1.78 1.2 1.04 1.77 2.72 1.26 3.38.96.11-.75.41-1.26.74-1.55-2.57-.29-5.27-1.29-5.27-5.73 0-1.27.45-2.3 1.2-3.11-.12-.29-.52-1.47.11-3.07 0 0 .98-.31 3.17 1.19a10.93 10.93 0 0 1 5.78 0c2.2-1.5 3.17-1.19 3.17-1.19.63 1.6.23 2.78.11 3.07.75.81 1.2 1.84 1.2 3.11 0 4.45-2.71 5.43-5.29 5.72.42.36.79 1.07.79 2.16v3.12c0 .31.21.68.8.56A11.5 11.5 0 0 0 12 .5Z"></path>
+                            </svg>
+                            <span>GitHub</span>
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="page-shell section" id="about" aria-labelledby="about-title">
+            <div class="about-band">
+                <h2 id="about-title">Pragmatic software with a clear interface.</h2>
+                <p class="about-copy">
+                    I care about tools that get out of the way: clear states, privacy-respecting defaults,
+                    and enough automation to make hard tasks easier without taking control away from the person using it.
                 </p>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="services" class="py-16 bg-gray-900 px-6">
-        <div class="container mx-auto">
-            <h2 class="text-3xl font-bold text-center mb-12 accent-color">My Key Areas</h2>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="card-bg p-8 rounded-lg shadow-xl transform hover:scale-105 transition-transform duration-300">
-                    <svg class="w-16 h-16 accent-color mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-                    <h3 class="text-2xl font-semibold mb-3 text-center text-white">Software Development</h3>
-                    <p class="text-gray-300 text-center">Creating custom software solutions for your unique business needs, from desktop to mobile applications.</p>
-                </div>
-                <div class="card-bg p-8 rounded-lg shadow-xl transform hover:scale-105 transition-transform duration-300">
-                    <svg class="w-16 h-16 accent-color mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-                    <h3 class="text-2xl font-semibold mb-3 text-center text-white">Web Services</h3>
-                    <p class="text-gray-300 text-center">Developing and integrating APIs, creating backend for web applications, cloud solutions, and everything related to web infrastructure.</p>
-                </div>
-                <div class="card-bg p-8 rounded-lg shadow-xl transform hover:scale-105 transition-transform duration-300">
-                    <svg class="w-16 h-16 accent-color mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg>
-                    <h3 class="text-2xl font-semibold mb-3 text-center text-white">AI Automation</h3>
-                    <p class="text-gray-300 text-center">Implementing AI-based tools to automate routine processes and increase efficiency.</p>
-                </div>
+        <section class="page-shell contact" id="contact" aria-labelledby="contact-title">
+            <div>
+                <h2 id="contact-title">Let us talk.</h2>
+                <p>For collaboration, product feedback, or questions about any project.</p>
             </div>
-        </div>
-    </section>
-
-    <section id="contact" class="py-16 section-bg px-6">
-        <div class="container mx-auto text-center">
-            <h2 class="text-3xl font-bold mb-8 accent-color">Interested? Let's Connect!</h2>
-            <p class="text-lg mb-4 text-gray-300">Ready to discuss your projects and ideas.</p>
-            <div class="flex justify-center items-center space-x-6 mb-8">
-                <a href="https://www.linkedin.com/in/liudmyla-kostik/" target="_blank" rel="noopener noreferrer" class="text-gray-300 hover:accent-color transition duration-300 flex items-center space-x-2">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd"/>
-                    </svg>
-                    <span>LinkedIn</span>
-                </a>
-                <a href="mailto:remie.lk@gmail.com" class="text-gray-300 hover:accent-color transition duration-300 flex items-center space-x-2">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                    <span>Email</span>
-                </a>
+            <div class="contact-links">
+                <a class="button button-primary" href="mailto:remie.lk@gmail.com">Email</a>
+                <a class="button button-secondary" href="https://github.com/beprogressive" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a class="button button-secondary" href="https://www.linkedin.com/in/liudmyla-kostik/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
             </div>
-             <p class="text-gray-400">Or find me on GitHub:</p>
-             <a href="https://github.com/beprogressive" target="_blank" rel="noopener noreferrer" class="text-lg accent-color hover:underline">
-                github.com/beprogressive
-            </a>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <footer class="hero-bg text-center py-8">
-        <p class="text-gray-400">&copy; <span id="currentYear"></span> beProgressive. All rights reserved (not really, it's open source).</p>
+    <footer class="site-footer">
+        <div class="page-shell">
+            &copy; 2026 beProgressive. Built with plain HTML and CSS.
+        </div>
     </footer>
-
-    <script>
-        // Set current year in footer
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-    </script>
-
 </body>
 </html>
