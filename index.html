@@ -256,11 +256,14 @@
             background: #f8f6ff;
         }
 
-        .orbit-tile .brand-mark {
-            border-radius: 18px;
-            height: 122px;
-            padding: 10px;
-            width: 122px;
+        .orbit-tile.brand-tile {
+            background: #303743;
+        }
+
+        .orbit-tile.brand-tile img {
+            max-height: none;
+            transform: scale(1.18);
+            width: min(82%, 178px);
         }
 
         .hero-note {
@@ -608,10 +611,8 @@
                     <div class="orbit-tile">
                         <img src="resources/Codictio_logo_vector.svg" alt="Codictio logo">
                     </div>
-                    <div class="orbit-tile">
-                        <span class="brand-mark" aria-hidden="true">
-                            <img src="resources/beProgressive_logo_1000.png" alt="">
-                        </span>
+                    <div class="orbit-tile brand-tile">
+                        <img src="resources/beProgressive_logo_1000.png" alt="beProgressive logo">
                     </div>
                 </div>
                 <div class="hero-note">
