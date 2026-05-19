@@ -858,14 +858,18 @@
 
             let isDarkTheme = false;
             let isTicking = false;
+            let lastScrollY = window.scrollY;
 
             const setTheme = () => {
                 const projectsTop = projectsSection.getBoundingClientRect().top;
-                // Separate thresholds prevent flicker when scrolling slowly near the theme boundary.
-                const enablePoint = window.innerHeight * 0.42;
-                const disablePoint = window.innerHeight * 0.58;
-                const shouldEnableDark = projectsTop <= enablePoint;
-                const shouldDisableDark = projectsTop > disablePoint;
+                const isScrollingUp = window.scrollY < lastScrollY;
+                // Direction-aware thresholds keep the theme reversible without flicker near the boundary.
+                const enterDarkPoint = window.innerHeight * 0.42;
+                const returnLightPoint = isScrollingUp ? enterDarkPoint : window.innerHeight * 0.48;
+                const shouldEnableDark = projectsTop <= enterDarkPoint;
+                const shouldReturnLight = projectsTop > returnLightPoint;
+
+                lastScrollY = window.scrollY;
 
                 if (!isDarkTheme && shouldEnableDark) {
                     document.body.classList.add("theme-dark");
@@ -873,7 +877,7 @@
                     return;
                 }
 
-                if (isDarkTheme && shouldDisableDark) {
+                if (isDarkTheme && shouldReturnLight) {
                     document.body.classList.remove("theme-dark");
                     isDarkTheme = false;
                 }
