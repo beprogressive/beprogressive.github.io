@@ -18,6 +18,30 @@
             --green: #12805c;
             --rose: #b34d64;
             --shadow: 0 18px 45px rgba(31, 41, 51, 0.08);
+            --page-gradient:
+                linear-gradient(180deg, rgba(244, 240, 232, 0.72) 0, rgba(251, 250, 247, 0) 420px);
+            --header-bg: rgba(251, 250, 247, 0.84);
+            --header-line: rgba(229, 225, 216, 0.82);
+            --hero-panel-bg: rgba(255, 255, 255, 0.76);
+            --card-shadow: 0 12px 30px rgba(31, 41, 51, 0.05);
+            --button-secondary-bg: rgba(255, 255, 255, 0.72);
+            --button-secondary-hover-bg: #ffffff;
+            --button-secondary-hover-border: #c8c1b5;
+            --tag-bg: #f3f4f6;
+            --tag-border: #e5e7eb;
+            --tag-ink: #475467;
+            --about-bg: #edf7f2;
+            --about-line: #d7eadf;
+            --about-copy: #344054;
+            --button-primary-hover-bg: #111827;
+            --platform-dark-bg: #111827;
+            --platform-dark-hover-bg: #1f2937;
+            --google-play-bg: #ffffff;
+            --google-play-hover-bg: #f9fafb;
+            --website-bg: #f4f0e8;
+            --website-hover-bg: #ffffff;
+            --website-border: #d8d1c4;
+            --website-hover-border: #bfb6a8;
             --radius: 8px;
         }
 
@@ -31,12 +55,48 @@
 
         body {
             margin: 0;
-            background:
-                linear-gradient(180deg, rgba(244, 240, 232, 0.72) 0, rgba(251, 250, 247, 0) 420px),
-                var(--bg);
+            background-color: var(--bg);
+            background-image: var(--page-gradient);
             color: var(--ink);
             font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             line-height: 1.6;
+            transition: background-color 360ms ease, color 360ms ease;
+        }
+
+        body.theme-dark {
+            color-scheme: dark;
+            --bg: #070a11;
+            --surface: #101722;
+            --surface-soft: #172030;
+            --ink: #f8fafc;
+            --muted: #aeb8c7;
+            --line: #283447;
+            --green: #7dd3a7;
+            --shadow: 0 18px 50px rgba(0, 0, 0, 0.34);
+            --page-gradient:
+                linear-gradient(180deg, rgba(8, 13, 23, 0.94) 0, rgba(7, 10, 17, 0) 420px);
+            --header-bg: rgba(7, 10, 17, 0.84);
+            --header-line: rgba(40, 52, 71, 0.84);
+            --hero-panel-bg: rgba(16, 23, 34, 0.78);
+            --card-shadow: 0 18px 44px rgba(0, 0, 0, 0.26);
+            --button-secondary-bg: rgba(16, 23, 34, 0.72);
+            --button-secondary-hover-bg: #172030;
+            --button-secondary-hover-border: #3a475c;
+            --tag-bg: #182232;
+            --tag-border: #2e3b50;
+            --tag-ink: #d5dbe5;
+            --about-bg: #0f211a;
+            --about-line: #244436;
+            --about-copy: #c5d2cd;
+            --button-primary-hover-bg: #e5e7eb;
+            --platform-dark-bg: #f8fafc;
+            --platform-dark-hover-bg: #e5e7eb;
+            --google-play-bg: #f8fafc;
+            --google-play-hover-bg: #ffffff;
+            --website-bg: #172030;
+            --website-hover-bg: #202c3d;
+            --website-border: #334155;
+            --website-hover-border: #52627a;
         }
 
         a {
@@ -57,10 +117,11 @@
 
         .site-header {
             backdrop-filter: blur(18px);
-            background: rgba(251, 250, 247, 0.84);
-            border-bottom: 1px solid rgba(229, 225, 216, 0.82);
+            background: var(--header-bg);
+            border-bottom: 1px solid var(--header-line);
             position: sticky;
             top: 0;
+            transition: background-color 360ms ease, border-color 360ms ease;
             z-index: 20;
         }
 
@@ -124,7 +185,7 @@
             display: grid;
             gap: 48px;
             grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
-            padding-block: 68px 24spx;
+            padding-block: 68px 24px;
             padding-top: 24px;
         }
 
@@ -158,7 +219,7 @@
         }
 
         .lead {
-            color: #475467;
+            color: var(--muted);
             font-size: clamp(18px, 2.2vw, 22px);
             max-width: 680px;
         }
@@ -180,7 +241,7 @@
             justify-content: center;
             min-height: 46px;
             padding: 11px 18px;
-            transition: background 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+            transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
         }
 
         .button:hover,
@@ -197,23 +258,23 @@
 
         .button-primary:hover,
         .button-primary:focus-visible {
-            background: #111827;
+            background: var(--button-primary-hover-bg);
         }
 
         .button-secondary {
-            background: rgba(255, 255, 255, 0.72);
+            background: var(--button-secondary-bg);
             color: var(--ink);
         }
 
         .button-secondary:hover,
         .button-secondary:focus-visible {
-            border-color: #c8c1b5;
-            background: var(--surface);
+            background: var(--button-secondary-hover-bg);
+            border-color: var(--button-secondary-hover-border);
         }
 
         .hero-panel {
             align-self: stretch;
-            background: rgba(255, 255, 255, 0.76);
+            background: var(--hero-panel-bg);
             border: 1px solid var(--line);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
@@ -222,6 +283,7 @@
             justify-content: space-between;
             min-height: 420px;
             overflow: visible;
+            transition: background-color 360ms ease, border-color 360ms ease, box-shadow 360ms ease;
         }
 
         .project-orbit {
@@ -306,6 +368,7 @@
 
         .section {
             padding-block: 52px;
+            scroll-margin-top: 104px;
         }
 
         .section-heading {
@@ -339,12 +402,13 @@
             background: var(--surface);
             border: 1px solid var(--line);
             border-radius: var(--radius);
-            box-shadow: 0 12px 30px rgba(31, 41, 51, 0.05);
+            box-shadow: var(--card-shadow);
             display: flex;
             flex-direction: column;
             min-height: 100%;
             padding: 22px;
             scroll-margin-top: 104px;
+            transition: background-color 360ms ease, border-color 360ms ease, box-shadow 360ms ease;
         }
 
         .project-logo {
@@ -357,6 +421,7 @@
             margin-bottom: 20px;
             overflow: hidden;
             padding: 18px;
+            transition: background-color 360ms ease;
         }
 
         .project-logo img {
@@ -395,13 +460,14 @@
         }
 
         .tag {
-            background: #f3f4f6;
-            border: 1px solid #e5e7eb;
+            background: var(--tag-bg);
+            border: 1px solid var(--tag-border);
             border-radius: 999px;
-            color: #475467;
+            color: var(--tag-ink);
             font-size: 12px;
             font-weight: 700;
             padding: 5px 9px;
+            transition: background-color 360ms ease, border-color 360ms ease, color 360ms ease;
         }
 
         .card-links {
@@ -413,49 +479,49 @@
 
         .platform-link {
             align-items: center;
-            background: #111827;
-            border: 1px solid #111827;
+            background: var(--platform-dark-bg);
+            border: 1px solid var(--platform-dark-bg);
             border-radius: 8px;
-            color: #ffffff;
+            color: var(--surface);
             display: inline-flex;
             font-size: 14px;
             font-weight: 760;
             gap: 10px;
             min-height: 42px;
             padding: 9px 13px;
-            transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+            transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
         }
 
         .platform-link:hover,
         .platform-link:focus-visible {
-            background: #1f2937;
-            border-color: #1f2937;
+            background: var(--platform-dark-hover-bg);
+            border-color: var(--platform-dark-hover-bg);
             outline: none;
             transform: translateY(-1px);
         }
 
         .platform-link.google-play {
-            background: #ffffff;
+            background: var(--google-play-bg);
             border-color: #d0d5dd;
             color: #1f2933;
         }
 
         .platform-link.google-play:hover,
         .platform-link.google-play:focus-visible {
-            background: #f9fafb;
+            background: var(--google-play-hover-bg);
             border-color: #b7bec8;
         }
 
         .platform-link.website {
-            background: #f4f0e8;
-            border-color: #d8d1c4;
+            background: var(--website-bg);
+            border-color: var(--website-border);
             color: var(--ink);
         }
 
         .platform-link.website:hover,
         .platform-link.website:focus-visible {
-            background: #ffffff;
-            border-color: #bfb6a8;
+            background: var(--website-hover-bg);
+            border-color: var(--website-hover-border);
         }
 
         .platform-icon {
@@ -465,13 +531,14 @@
         }
 
         .about-band {
-            background: #edf7f2;
-            border: 1px solid #d7eadf;
+            background: var(--about-bg);
+            border: 1px solid var(--about-line);
             border-radius: var(--radius);
             display: grid;
             gap: 28px;
             grid-template-columns: 0.8fr 1.2fr;
             padding: 28px;
+            transition: background-color 360ms ease, border-color 360ms ease;
         }
 
         .about-band h2 {
@@ -481,7 +548,7 @@
         }
 
         .about-copy {
-            color: #344054;
+            color: var(--about-copy);
             margin-bottom: 0;
         }
 
@@ -492,6 +559,7 @@
             gap: 24px;
             justify-content: space-between;
             padding-block: 38px 54px;
+            scroll-margin-top: 104px;
         }
 
         .contact h2 {
@@ -517,6 +585,20 @@
             color: var(--muted);
             font-size: 14px;
             padding: 24px 0;
+            transition: border-color 360ms ease, color 360ms ease;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            *,
+            *::before,
+            *::after {
+                transition-duration: 0.01ms !important;
+                transition-delay: 0ms !important;
+            }
         }
 
         @media (max-width: 880px) {
@@ -766,5 +848,58 @@
             &copy; 2026 beProgressive. Built with plain HTML and CSS.
         </div>
     </footer>
+    <script>
+        (() => {
+            const projectsSection = document.querySelector("#projects");
+
+            if (!projectsSection) {
+                return;
+            }
+
+            let isDarkTheme = false;
+            let isTicking = false;
+            let lastScrollY = window.scrollY;
+
+            const setTheme = () => {
+                const projectsTop = projectsSection.getBoundingClientRect().top;
+                const isScrollingUp = window.scrollY < lastScrollY;
+                // Direction-aware thresholds keep the theme reversible without flicker near the boundary.
+                const enterDarkPoint = window.innerHeight * 0.42;
+                const returnLightPoint = isScrollingUp ? enterDarkPoint : window.innerHeight * 0.48;
+                const shouldEnableDark = projectsTop <= enterDarkPoint;
+                const shouldReturnLight = projectsTop > returnLightPoint;
+
+                lastScrollY = window.scrollY;
+
+                if (!isDarkTheme && shouldEnableDark) {
+                    document.body.classList.add("theme-dark");
+                    isDarkTheme = true;
+                    return;
+                }
+
+                if (isDarkTheme && shouldReturnLight) {
+                    document.body.classList.remove("theme-dark");
+                    isDarkTheme = false;
+                }
+            };
+
+            const requestThemeUpdate = () => {
+                if (isTicking) {
+                    return;
+                }
+
+                isTicking = true;
+
+                window.requestAnimationFrame(() => {
+                    setTheme();
+                    isTicking = false;
+                });
+            };
+
+            setTheme();
+            window.addEventListener("scroll", requestThemeUpdate, { passive: true });
+            window.addEventListener("resize", requestThemeUpdate);
+        })();
+    </script>
 </body>
 </html>
