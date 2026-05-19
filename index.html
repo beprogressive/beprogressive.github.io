@@ -221,7 +221,7 @@
             flex-direction: column;
             justify-content: space-between;
             min-height: 420px;
-            overflow: hidden;
+            overflow: visible;
         }
 
         .project-orbit {
@@ -238,6 +238,7 @@
             justify-content: center;
             min-height: 172px;
             padding: 28px;
+            position: relative;
         }
 
         a.orbit-tile {
@@ -250,6 +251,7 @@
             filter: brightness(1.08);
             outline: none;
             transform: translateY(-2px);
+            z-index: 1;
         }
 
         .orbit-tile:nth-child(odd) {
@@ -258,6 +260,7 @@
 
         .orbit-tile:nth-child(1) {
             background: #1d2e79;
+            border-top-left-radius: var(--radius);
         }
 
         .orbit-tile img {
@@ -268,6 +271,7 @@
 
         .orbit-tile:nth-child(2) {
             background: #131513;
+            border-top-right-radius: var(--radius);
         }
 
         .orbit-tile:nth-child(3) {
