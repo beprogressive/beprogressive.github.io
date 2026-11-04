@@ -392,6 +392,31 @@
             max-width: 430px;
         }
 
+        .game-banner {
+            border-radius: var(--radius);
+            box-shadow: var(--card-shadow);
+            display: block;
+            margin-bottom: 18px;
+            overflow: hidden;
+            transition: box-shadow 520ms ease, filter 160ms ease;
+        }
+
+        .game-banner:hover,
+        .game-banner:focus-visible {
+            filter: brightness(1.08);
+        }
+
+        .game-banner:focus-visible {
+            outline: 2px solid var(--green);
+            outline-offset: 2px;
+        }
+
+        .game-banner img {
+            display: block;
+            height: auto;
+            width: 100%;
+        }
+
         .project-grid {
             display: grid;
             gap: 18px;
@@ -732,6 +757,13 @@
                 <h2 id="projects-title">Selected projects</h2>
                 <p>A short map of what I am building now, with links to learn more or try the product.</p>
             </div>
+
+            <a class="game-banner" href="https://barelymadeit.kaiworks.dev/" target="_blank" rel="noopener noreferrer">
+                <picture>
+                    <source media="(max-width: 640px)" srcset="resources/barely-made-it-narrow.webp" width="1200" height="1080">
+                    <img src="resources/barely-made-it-wide.webp" width="2144" height="700" loading="lazy" alt="Barely Made It: play in your browser. A red panda stands calmly on a bamboo bridge and says &ldquo;I'm fine&rdquo; while bamboo poles crash down all around it.">
+                </picture>
+            </a>
 
             <div class="project-grid">
 
