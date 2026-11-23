@@ -670,7 +670,7 @@
             transition: border-color 520ms ease, color 520ms ease;
         }
 
-        /* "Under the hood" layer: source code that surfaces behind the facade once the page turns dark. */
+        /* "Under the hood" layer: this page's own source surfaces behind the facade once the page turns dark. */
         main,
         .site-footer {
             position: relative;
@@ -728,6 +728,35 @@
         .code-layer .tok-num { color: #f4b183; }
         .code-layer .tok-com { color: #64748b; font-style: italic; }
 
+        .code-caption {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            bottom: 16px;
+            color: var(--muted);
+            font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+            font-size: 11px;
+            left: 16px;
+            letter-spacing: 0;
+            opacity: 0;
+            padding: 6px 12px;
+            pointer-events: none;
+            position: fixed;
+            transform: translateY(8px);
+            transition: opacity 420ms ease, transform 420ms ease;
+            z-index: 15;
+        }
+
+        .code-caption::after {
+            content: " · line " attr(data-line);
+            opacity: 0.7;
+        }
+
+        .code-caption.is-visible {
+            opacity: 0.9;
+            transform: none;
+        }
+
         @media (max-width: 720px) {
             .code-layer__columns {
                 grid-template-columns: minmax(0, 1fr);
@@ -740,6 +769,11 @@
 
             .code-layer__source {
                 font-size: 11px;
+            }
+
+            /* On phones the badge would sit on top of card buttons. */
+            .code-caption {
+                display: none;
             }
         }
 
@@ -842,10 +876,11 @@
 <body>
     <div class="code-layer" aria-hidden="true">
         <div class="code-layer__columns">
-            <div class="code-layer__column"><pre class="code-layer__source" data-source="0"></pre></div>
-            <div class="code-layer__column"><pre class="code-layer__source" data-source="1"></pre></div>
+            <div class="code-layer__column"><pre class="code-layer__source"></pre></div>
+            <div class="code-layer__column"><pre class="code-layer__source"></pre></div>
         </div>
     </div>
+    <div class="code-caption" aria-hidden="true"></div>
 
     <header class="site-header">
         <div class="page-shell nav">
@@ -1131,314 +1166,213 @@
         })();
     </script>
     <script>
-        // "Under the hood": original Kotlin sources that surface behind the page as it turns dark.
+        // "Under the hood": the real source of this very page surfaces behind it as it turns dark.
         (() => {
             const layer = document.querySelector(".code-layer");
+            const caption = document.querySelector(".code-caption");
             const heroSection = document.querySelector(".hero");
             const projectsSection = document.querySelector("#projects");
             const approachSection = document.querySelector("#approach");
             const contactSection = document.querySelector("#contact");
 
-            if (!layer || !heroSection || !projectsSection || !approachSection || !contactSection) {
+            if (!layer || !caption || !heroSection || !projectsSection || !approachSection || !contactSection) {
                 return;
             }
 
-            const sources = [
-String.raw`// feature/projects/ProjectsViewModel.kt
-package dev.beprogressive.feature.projects
+            const [markupBlock, assetsBlock] = layer.querySelectorAll(".code-layer__source");
+            // Snapshot before anything is injected: the fallback when the page can't fetch itself (file://).
+            const domSnapshot = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+            const clamp = (value) => Math.min(1, Math.max(0, value));
 
-@HiltViewModel
-class ProjectsViewModel @Inject constructor(
-    observeProjects: ObserveProjectsUseCase,
-    private val refreshProjects: RefreshProjectsUseCase,
-) : ViewModel() {
-
-    private val refreshing = MutableStateFlow(false)
-    private val _events = Channel<ProjectsEvent>(Channel.BUFFERED)
-    val events: Flow<ProjectsEvent> = _events.receiveAsFlow()
-
-    val uiState: StateFlow<ProjectsUiState> =
-        combine(observeProjects(), refreshing) { projects, isRefreshing ->
-            when {
-                projects.isEmpty() && isRefreshing -> ProjectsUiState.Loading
-                projects.isEmpty() -> ProjectsUiState.Empty
-                else -> ProjectsUiState.Content(
-                    projects = projects.map(Project::toUiModel).toImmutableList(),
-                    isRefreshing = isRefreshing,
-                )
-            }
-        }
-            .catch { error -> emit(ProjectsUiState.Error(error.toUserMessage())) }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000),
-                initialValue = ProjectsUiState.Loading,
-            )
-
-    init {
-        refresh()
-    }
-
-    fun refresh() {
-        if (refreshing.value) return
-        viewModelScope.launch {
-            refreshing.value = true
-            refreshProjects()
-                .onFailure { _events.send(ProjectsEvent.ShowOfflineBanner) }
-            refreshing.value = false
-        }
-    }
-}
-
-sealed interface ProjectsUiState {
-    data object Loading : ProjectsUiState
-    data object Empty : ProjectsUiState
-    data class Content(
-        val projects: ImmutableList<ProjectUiModel>,
-        val isRefreshing: Boolean,
-    ) : ProjectsUiState
-    data class Error(val message: UiText) : ProjectsUiState
-}
-
-@Composable
-fun ProjectsRoute(
-    onProjectClick: (ProjectId) -> Unit,
-    viewModel: ProjectsViewModel = hiltViewModel(),
-) {
-    val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val snackbarHostState = remember { SnackbarHostState() }
-    val offlineMessage = stringResource(R.string.offline_cached_data)
-
-    ObserveAsEvents(viewModel.events) { event ->
-        when (event) {
-            ProjectsEvent.ShowOfflineBanner ->
-                snackbarHostState.showSnackbar(offlineMessage)
-        }
-    }
-
-    ProjectsScreen(
-        state = state,
-        snackbarHostState = snackbarHostState,
-        onRefresh = viewModel::refresh,
-        onProjectClick = onProjectClick,
-    )
-}
-
-@Composable
-private fun ProjectsScreen(
-    state: ProjectsUiState,
-    snackbarHostState: SnackbarHostState,
-    onRefresh: () -> Unit,
-    onProjectClick: (ProjectId) -> Unit,
-) {
-    Scaffold(snackbarHost = { SnackbarHost(snackbarHostState) }) { padding ->
-        when (state) {
-            ProjectsUiState.Loading -> FullScreenLoader()
-            ProjectsUiState.Empty -> EmptyState(onRetry = onRefresh)
-            is ProjectsUiState.Error -> ErrorState(state.message, onRetry = onRefresh)
-            is ProjectsUiState.Content -> PullToRefreshBox(
-                isRefreshing = state.isRefreshing,
-                onRefresh = onRefresh,
-                modifier = Modifier.padding(padding),
-            ) {
-                LazyColumn(contentPadding = PaddingValues(16.dp)) {
-                    items(state.projects, key = { it.id.value }) { project ->
-                        ProjectCard(project, onClick = { onProjectClick(project.id) })
-                    }
-                }
-            }
-        }
-    }
-}
-`,
-String.raw`// data/projects/OfflineFirstProjectRepository.kt
-package dev.beprogressive.data.projects
-
-internal class OfflineFirstProjectRepository @Inject constructor(
-    private val dao: ProjectDao,
-    private val api: ProjectsApi,
-    private val clock: Clock,
-    @IoDispatcher private val io: CoroutineDispatcher,
-) : ProjectRepository {
-
-    override fun observeProjects(): Flow<List<Project>> =
-        dao.observeAll()
-            .map { entities -> entities.map(ProjectEntity::toDomain) }
-            .distinctUntilChanged()
-
-    override suspend fun refresh(force: Boolean): Result<Unit> = withContext(io) {
-        if (!force && !isStale()) return@withContext Result.success(Unit)
-
-        suspendRunCatching {
-            val remote = retryWithBackoff(times = 3) { api.fetchProjects() }
-            dao.replaceAll(remote.map(ProjectDto::toEntity))
-            dao.markSynced(at = clock.now())
-        }.onFailure { error ->
-            Timber.w(error, "Projects refresh failed, serving cached data")
-        }
-    }
-
-    private suspend fun isStale(): Boolean {
-        val lastSync = dao.lastSyncedAt() ?: return true
-        return clock.now() - lastSync > CACHE_TTL
-    }
-
-    private companion object {
-        val CACHE_TTL = 6.hours
-    }
-}
-
-/** Like runCatching, but never swallows coroutine cancellation. */
-suspend inline fun <T> suspendRunCatching(block: () -> T): Result<T> =
-    try {
-        Result.success(block())
-    } catch (cancellation: CancellationException) {
-        throw cancellation
-    } catch (error: Throwable) {
-        Result.failure(error)
-    }
-
-suspend fun <T> retryWithBackoff(
-    times: Int,
-    initialDelay: Duration = 300.milliseconds,
-    factor: Double = 2.0,
-    block: suspend () -> T,
-): T {
-    var currentDelay = initialDelay
-    repeat(times - 1) {
-        try {
-            return block()
-        } catch (error: IOException) {
-            delay(currentDelay)
-            currentDelay *= factor
-        }
-    }
-    return block()
-}
-
-class ProjectsViewModelTest {
-
-    @get:Rule
-    val mainDispatcherRule = MainDispatcherRule()
-
-    private val repository = FakeProjectRepository()
-
-    @Test
-    fun ${"`"}shows cached projects when refresh fails offline${"`"}() = runTest {
-        repository.emit(listOf(sampleProject()))
-        repository.failNextRefreshWith(IOException("offline"))
-
-        val viewModel = ProjectsViewModel(
-            observeProjects = ObserveProjectsUseCase(repository),
-            refreshProjects = RefreshProjectsUseCase(repository),
-        )
-
-        viewModel.uiState.test {
-            val content = awaitItem() as ProjectsUiState.Content
-            assertThat(content.projects).hasSize(1)
-            cancelAndIgnoreRemainingEvents()
-        }
-        viewModel.events.test {
-            assertThat(awaitItem()).isEqualTo(ProjectsEvent.ShowOfflineBanner)
-        }
-    }
-}
-
-@Serializable
-data class ProjectDto(
-    @SerialName("id") val id: String,
-    @SerialName("title") val title: String,
-    @SerialName("platforms") val platforms: List<String> = emptyList(),
-    @SerialName("updated_at") val updatedAt: Instant,
-)
-`,
-            ];
-
-            const KEYWORDS = new Set([
-                "package", "import", "class", "interface", "object", "fun", "val", "var", "private", "internal",
-                "override", "suspend", "inline", "return", "if", "else", "when", "is", "in", "try", "catch",
-                "throw", "data", "sealed", "companion", "constructor", "init", "true", "false", "null", "repeat",
-            ]);
-            const TOKEN = /(\/\/[^\n]*|\/\*\*[\s\S]*?\*\/)|("(?:[^"\\\n]|\\.)*")|(@[A-Za-z][\w:]*)|(\b\d[\d_.]*\b)|(\b[A-Za-z_]\w*\b)/g;
+            const TOKEN = new RegExp([
+                /(<!--[\s\S]*?-->|\/\*[\s\S]*?\*\/|\/\/[^\n]*)/.source,           // 1: comments
+                /("(?:[^"\\\n]|\\.)*")/.source,                                   // 2: double-quoted strings
+                /(<\/?[a-zA-Z][\w-]*|\/?>|<!DOCTYPE)/.source,                     // 3: tag delimiters
+                /([a-zA-Z_:][\w:-]*(?==))/.source,                                // 4: attribute names
+                /(--?[a-z][\w-]*(?=:\s[^\n]*;[ \t]*$))/.source,                   // 5: CSS properties
+                /(#[0-9a-fA-F]{3,8}\b|\b\d+(?:\.\d+)?(?:px|ms|vh|vw|fr|deg|s|%)?)/.source, // 6: numbers, colors
+                /\b(const|let|return|new|true|false|null|function|async|await|else|typeof)\b/.source, // 7: keywords
+                /([a-zA-Z_$][\w$-]*(?=\())/.source,                               // 8: calls
+            ].join("|"), "gm");
+            const KINDS = [null, "com", "str", "kw", "type", "ann", "num", "kw", "fn"];
             const escapeHtml = (text) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            const span = (kind, text) => '<span class="tok-' + kind + '">' + escapeHtml(text) + "</span>";
 
-            // Tiny Kotlin-ish highlighter: enough for a background, not a parser.
+            // Tiny HTML/CSS/JS highlighter: enough for a background, not a parser.
             const highlight = (source) => {
                 let html = "";
                 let cursor = 0;
 
                 for (const match of source.matchAll(TOKEN)) {
-                    const [text, comment, string, annotation, number, word] = match;
+                    const group = match.findIndex((value, index) => index > 0 && value !== undefined);
                     html += escapeHtml(source.slice(cursor, match.index));
-                    cursor = match.index + text.length;
-
-                    if (comment) {
-                        html += span("com", text);
-                    } else if (string) {
-                        html += span("str", text);
-                    } else if (annotation) {
-                        html += span("ann", text);
-                    } else if (number) {
-                        html += span("num", text);
-                    } else if (KEYWORDS.has(word)) {
-                        html += span("kw", text);
-                    } else if (/^[A-Z]/.test(word)) {
-                        html += span("type", text);
-                    } else if (/^ ?[({]/.test(source.slice(cursor, cursor + 2))) {
-                        html += span("fn", text);
-                    } else {
-                        html += escapeHtml(text);
-                    }
+                    html += '<span class="tok-' + KINDS[group] + '">' + escapeHtml(match[0]) + "</span>";
+                    cursor = match.index + match[0].length;
                 }
 
                 return html + escapeHtml(source.slice(cursor));
             };
 
-            const blocks = Array.from(layer.querySelectorAll(".code-layer__source")).map((element, index) => {
-                const html = highlight(sources[Number(element.dataset.source)]);
-                // Two copies let the parallax loop seamlessly with a modulo offset.
-                element.innerHTML = html + "\n" + html;
-                return { element, speed: index === 0 ? 0.22 : 0.3, loopHeight: 0 };
-            });
-
-            const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-            const clamp = (value) => Math.min(1, Math.max(0, value));
+            const state = {
+                anchors: [],
+                focusY: 0,
+                isGliding: false,
+                shownLine: null,
+                targetLine: 0,
+                assetsLoopHeight: 0,
+                lineHeight: 0,
+                markupStartLine: 0,
+                ready: false,
+            };
             let isTicking = false;
 
-            const measure = () => {
-                blocks.forEach((block) => {
-                    block.loopHeight = block.element.scrollHeight / 2;
+            // Maps landmark elements to the line where their opening tag lives in the markup.
+            // The sticky header is left out: its top never moves, which would break the ordering.
+            const buildAnchors = (markupLines) => {
+                const landmarks = document.querySelectorAll(
+                    "main > section, .project-banner, .project-card, .about-band, .principle-card, .stack, body > footer"
+                );
+                const anchors = [];
+                let searchFrom = 0;
+
+                landmarks.forEach((element) => {
+                    const tag = "<" + element.tagName.toLowerCase();
+                    const marker = element.id ? 'id="' + element.id + '"' : 'class="' + element.getAttribute("class") + '"';
+                    for (let line = searchFrom; line < markupLines.length; line += 1) {
+                        if (markupLines[line].includes(tag) && markupLines[line].includes(marker)) {
+                            anchors.push({ element, line });
+                            searchFrom = line + 1;
+                            break;
+                        }
+                    }
                 });
+
+                return anchors;
+            };
+
+            const render = (source) => {
+                const lines = source.replace(/\r\n/g, "\n").split("\n");
+                const bodyStart = lines.findIndex((line) => /<body[\s>]/.test(line));
+                const bodyScripts = lines.findIndex((line, index) => index > bodyStart && /<script[\s>]/.test(line));
+                const bodyEnd = bodyScripts > bodyStart ? bodyScripts : lines.length;
+
+                if (bodyStart < 0) {
+                    return;
+                }
+
+                const markupLines = lines.slice(bodyStart, bodyEnd);
+                const assets = lines.slice(0, bodyStart).concat(lines.slice(bodyEnd)).join("\n");
+                const assetsHtml = highlight(assets);
+
+                markupBlock.innerHTML = highlight(markupLines.join("\n"));
+                // Two copies let the assets column loop seamlessly with a modulo offset.
+                assetsBlock.innerHTML = assetsHtml + "\n" + assetsHtml;
+
+                state.anchors = buildAnchors(markupLines);
+                state.markupStartLine = bodyStart;
+                state.ready = true;
+                measure();
+                update();
+            };
+
+            const measure = () => {
+                state.lineHeight = parseFloat(getComputedStyle(markupBlock).lineHeight) || 20;
+                state.assetsLoopHeight = assetsBlock.scrollHeight / 2;
+            };
+
+            // Fractional markup line that belongs to the given viewport y.
+            const lineAt = (focusY) => {
+                // Cards in one grid row share a top edge; keep the first one so the code flows instead of jumping.
+                const points = [];
+                state.anchors.forEach(({ element, line }) => {
+                    const top = element.getBoundingClientRect().top;
+                    const last = points[points.length - 1];
+                    if (!last || top - last.top > 4) {
+                        points.push({ top, line });
+                    }
+                });
+
+                if (points.length === 0) {
+                    return 0;
+                }
+
+                let index = 0;
+                while (index < points.length - 1 && points[index + 1].top <= focusY) {
+                    index += 1;
+                }
+
+                const current = points[index];
+                const next = points[index + 1];
+                if (!next) {
+                    return current.line;
+                }
+
+                const progress = clamp((focusY - current.top) / Math.max(1, next.top - current.top));
+                return current.line + progress * (next.line - current.line);
+            };
+
+            // Eases the markup column toward its target line, so jumps (nav clicks, fast flicks) glide.
+            const animateMarkup = () => {
+                const distance = state.targetLine - state.shownLine;
+                state.shownLine = Math.abs(distance) < 0.02 ? state.targetLine : state.shownLine + distance * 0.16;
+
+                const markupOffset = state.focusY - (state.shownLine + 0.5) * state.lineHeight;
+                markupBlock.style.transform = "translate3d(0, " + markupOffset.toFixed(1) + "px, 0)";
+
+                state.isGliding = state.shownLine !== state.targetLine;
+                if (state.isGliding) {
+                    window.requestAnimationFrame(animateMarkup);
+                }
             };
 
             const update = () => {
                 const viewport = window.innerHeight;
                 const projectsTop = projectsSection.getBoundingClientRect().top;
                 const approachTop = approachSection.getBoundingClientRect().top;
+                const heroBottom = Math.max(0, heroSection.getBoundingClientRect().bottom);
+                const contactTop = contactSection.getBoundingClientRect().top + 24;
                 const isDark = document.body.classList.contains("theme-dark");
 
                 // Code starts faint at the dark switch and reaches full strength by "How I work".
                 const travelled = viewport * 0.42 - projectsTop;
                 const remaining = approachTop - viewport * 0.5;
                 const depth = clamp(travelled / Math.max(1, travelled + remaining));
-                const reveal = isDark ? 0.45 + 0.55 * depth : 0;
-                const heroBottom = Math.max(0, heroSection.getBoundingClientRect().bottom);
+                const reveal = isDark && state.ready ? 0.45 + 0.55 * depth : 0;
+                const codeBottom = Math.max(0, Math.min(contactTop, viewport));
+
                 layer.style.setProperty("--code-reveal", reveal.toFixed(3));
                 layer.style.setProperty("--code-top", Math.min(heroBottom, viewport).toFixed(0) + "px");
                 // Contact has no card background, so the code fades out before it.
-                const contactTop = contactSection.getBoundingClientRect().top + 24;
-                layer.style.setProperty("--code-bottom", Math.max(0, Math.min(contactTop, viewport)).toFixed(0) + "px");
+                layer.style.setProperty("--code-bottom", codeBottom.toFixed(0) + "px");
 
-                if (reduceMotion.matches) {
-                    blocks.forEach(({ element }) => { element.style.transform = ""; });
+                if (!state.ready) {
                     return;
                 }
 
-                blocks.forEach(({ element, speed, loopHeight }) => {
-                    const offset = loopHeight > 0 ? (window.scrollY * speed) % loopHeight : 0;
-                    element.style.transform = "translate3d(0, " + (-offset).toFixed(1) + "px, 0)";
-                });
+                const focusY = viewport * 0.45;
+                const line = lineAt(focusY);
+                const captionVisible = reveal > 0 && heroBottom < viewport * 0.6 && codeBottom > viewport * 0.7;
+                caption.classList.toggle("is-visible", captionVisible);
+                caption.dataset.line = String(state.markupStartLine + Math.round(line) + 1);
+
+                if (reduceMotion.matches) {
+                    markupBlock.style.transform = "";
+                    assetsBlock.style.transform = "";
+                    return;
+                }
+
+                // Markup column tracks the section in view: the code under a card is that card's code.
+                state.focusY = focusY;
+                state.targetLine = line;
+                if (state.shownLine === null) {
+                    state.shownLine = line;
+                }
+                if (!state.isGliding) {
+                    animateMarkup();
+                }
+
+                const assetsOffset = state.assetsLoopHeight > 0 ? (window.scrollY * 0.3) % state.assetsLoopHeight : 0;
+                assetsBlock.style.transform = "translate3d(0, " + (-assetsOffset).toFixed(1) + "px, 0)";
             };
 
             const requestUpdate = () => {
@@ -1453,7 +1387,7 @@ data class ProjectDto(
                 });
             };
 
-            measure();
+            caption.textContent = "view-source:" + (window.location.host || "this-page");
             update();
             window.addEventListener("scroll", requestUpdate, { passive: true });
             window.addEventListener("resize", () => {
@@ -1462,6 +1396,12 @@ data class ProjectDto(
             });
             // The theme class flips inside the other scroll handler, so re-sync after it settles.
             new MutationObserver(requestUpdate).observe(document.body, { attributes: true, attributeFilter: ["class"] });
+
+            // Same bytes as view-source: the HTML the server actually sent, not the live DOM.
+            fetch(window.location.href.split("#")[0], { cache: "default" })
+                .then((response) => (response.ok ? response.text() : Promise.reject(response.status)))
+                .catch(() => domSnapshot)
+                .then(render);
         })();
     </script>
 </body>
