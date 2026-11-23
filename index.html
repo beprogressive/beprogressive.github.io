@@ -14,9 +14,7 @@
             --ink: #1f2933;
             --muted: #667085;
             --line: #e5e1d8;
-            --blue: #2563eb;
             --green: #12805c;
-            --rose: #b34d64;
             --shadow: 0 18px 45px rgba(31, 41, 51, 0.08);
             --page-gradient:
                 linear-gradient(180deg, rgba(244, 240, 232, 0.72) 0, rgba(251, 250, 247, 0) 420px);
@@ -43,6 +41,15 @@
             --website-border: #d8d1c4;
             --website-hover-border: #bfb6a8;
             --radius: 8px;
+            --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+            --theme-fade: 520ms ease;
+            --hover-fade: 160ms ease;
+            /* Product colors stay the same in both themes. */
+            --brand-beprogressive: #290070;
+            --brand-codictio: #1d2e79;
+            --brand-is-connected: #131513;
+            --brand-no-chaos: #173f36;
         }
 
         * {
@@ -54,13 +61,13 @@
         }
 
         body {
-            margin: 0;
             background-color: var(--bg);
             background-image: var(--page-gradient);
             color: var(--ink);
-            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-family: var(--font-sans);
             line-height: 1.6;
-            transition: background-color 520ms ease, color 520ms ease;
+            margin: 0;
+            transition: background-color var(--theme-fade), color var(--theme-fade);
         }
 
         body.theme-dark {
@@ -109,6 +116,11 @@
             max-width: 100%;
         }
 
+        :focus-visible {
+            outline: 2px solid var(--green);
+            outline-offset: 2px;
+        }
+
         .page-shell {
             margin: 0 auto;
             max-width: 1120px;
@@ -121,7 +133,7 @@
             border-bottom: 1px solid var(--header-line);
             position: sticky;
             top: 0;
-            transition: background-color 520ms ease, border-color 520ms ease;
+            transition: background-color var(--theme-fade), border-color var(--theme-fade);
             z-index: 20;
         }
 
@@ -138,12 +150,11 @@
             display: inline-flex;
             font-weight: 760;
             gap: 12px;
-            letter-spacing: 0;
         }
 
         .brand-mark {
             align-items: center;
-            background: #290070;    
+            background: var(--brand-beprogressive);
             border-radius: 10px;
             display: inline-flex;
             height: 48px;
@@ -178,20 +189,13 @@
         .nav-links a:focus-visible {
             background: var(--surface-soft);
             color: var(--ink);
-            outline: none;
         }
 
         .hero {
             display: grid;
             gap: 48px;
             grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
-            padding-block: 68px 24px;
-            padding-top: 24px;
-        }
-
-        .hero-actions {
-            align-items: center;
-            display: flex
+            padding-block: 24px;
         }
 
         .eyebrow {
@@ -212,7 +216,6 @@
 
         h1 {
             font-size: clamp(42px, 5.9vw, 68px);
-            letter-spacing: 0;
             line-height: 1;
             margin-bottom: 22px;
             max-width: 780px;
@@ -225,6 +228,7 @@
         }
 
         .hero-actions {
+            align-items: center;
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
@@ -241,13 +245,12 @@
             justify-content: center;
             min-height: 46px;
             padding: 11px 18px;
-            transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+            transition: background-color var(--hover-fade), border-color var(--hover-fade), color var(--hover-fade), transform var(--hover-fade);
         }
 
         .button:hover,
         .button:focus-visible {
             transform: translateY(-1px);
-            outline: none;
         }
 
         .button-primary {
@@ -282,13 +285,11 @@
             flex-direction: column;
             justify-content: space-between;
             min-height: 420px;
-            overflow: visible;
-            transition: background-color 520ms ease, border-color 520ms ease, box-shadow 520ms ease;
+            transition: background-color var(--theme-fade), border-color var(--theme-fade), box-shadow var(--theme-fade);
         }
 
         .project-orbit {
             display: grid;
-            gap: 0;
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
@@ -305,13 +306,12 @@
 
         a.orbit-tile {
             cursor: pointer;
-            transition: filter 160ms ease, transform 160ms ease;
+            transition: filter var(--hover-fade), transform var(--hover-fade);
         }
 
         a.orbit-tile:hover,
         a.orbit-tile:focus-visible {
             filter: brightness(1.08);
-            outline: none;
             transform: translateY(-2px);
             z-index: 1;
         }
@@ -321,7 +321,7 @@
         }
 
         .orbit-tile:nth-child(1) {
-            background: #1d2e79;
+            background: var(--brand-codictio);
             border-top-left-radius: var(--radius);
         }
 
@@ -332,16 +332,16 @@
         }
 
         .orbit-tile:nth-child(2) {
-            background: #131513;
+            background: var(--brand-is-connected);
             border-top-right-radius: var(--radius);
         }
 
         .orbit-tile:nth-child(3) {
-            background: #173f36;
+            background: var(--brand-no-chaos);
         }
 
         .orbit-tile.brand-tile {
-            background: #290070;
+            background: var(--brand-beprogressive);
         }
 
         .orbit-tile.brand-tile img {
@@ -381,7 +381,6 @@
 
         .section-heading h2 {
             font-size: clamp(30px, 4vw, 46px);
-            letter-spacing: 0;
             line-height: 1.05;
             margin-bottom: 0;
         }
@@ -398,7 +397,7 @@
             display: block;
             margin-bottom: 18px;
             overflow: hidden;
-            transition: box-shadow 520ms ease, filter 160ms ease;
+            transition: box-shadow var(--theme-fade), filter var(--hover-fade);
         }
 
         .game-banner:hover,
@@ -406,13 +405,7 @@
             filter: brightness(1.08);
         }
 
-        .game-banner:focus-visible {
-            outline: 2px solid var(--green);
-            outline-offset: 2px;
-        }
-
         .game-banner img {
-            display: block;
             height: auto;
             width: 100%;
         }
@@ -433,7 +426,7 @@
             min-height: 100%;
             padding: 22px;
             scroll-margin-top: 104px;
-            transition: background-color 520ms ease, border-color 520ms ease, box-shadow 520ms ease;
+            transition: background-color var(--theme-fade), border-color var(--theme-fade), box-shadow var(--theme-fade);
         }
 
         .project-logo {
@@ -446,7 +439,7 @@
             margin-bottom: 20px;
             overflow: hidden;
             padding: 18px;
-            transition: background-color 520ms ease;
+            transition: background-color var(--theme-fade);
         }
 
         .project-logo img {
@@ -454,16 +447,16 @@
             object-fit: contain;
         }
 
-        .project-logo.no-chaos {
-            background: #173f36;
+        .project-logo.codictio {
+            background: var(--brand-codictio);
         }
 
-        .project-logo.codictio {
-            background: #1d2e79;
+        .project-logo.no-chaos {
+            background: var(--brand-no-chaos);
         }
 
         .project-logo.is-connected {
-            background: #131513;
+            background: var(--brand-is-connected);
         }
 
         .project-card h3 {
@@ -481,7 +474,9 @@
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
+            list-style: none;
             margin: auto 0 20px;
+            padding: 0;
         }
 
         .tag {
@@ -492,7 +487,7 @@
             font-size: 12px;
             font-weight: 700;
             padding: 5px 9px;
-            transition: background-color 520ms ease, border-color 520ms ease, color 520ms ease;
+            transition: background-color var(--theme-fade), border-color var(--theme-fade), color var(--theme-fade);
         }
 
         .card-links {
@@ -506,7 +501,7 @@
             align-items: center;
             background: var(--platform-dark-bg);
             border: 1px solid var(--platform-dark-bg);
-            border-radius: 8px;
+            border-radius: var(--radius);
             color: var(--surface);
             display: inline-flex;
             font-size: 14px;
@@ -514,14 +509,13 @@
             gap: 10px;
             min-height: 42px;
             padding: 9px 13px;
-            transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+            transition: background-color var(--hover-fade), border-color var(--hover-fade), color var(--hover-fade), transform var(--hover-fade);
         }
 
         .platform-link:hover,
         .platform-link:focus-visible {
             background: var(--platform-dark-hover-bg);
             border-color: var(--platform-dark-hover-bg);
-            outline: none;
             transform: translateY(-1px);
         }
 
@@ -549,6 +543,14 @@
             border-color: var(--website-hover-border);
         }
 
+        /* Holds shared <symbol> icons; it must stay in the DOM for <use> to resolve, but take no space. */
+        .icon-sprite {
+            height: 0;
+            overflow: hidden;
+            position: absolute;
+            width: 0;
+        }
+
         .platform-icon {
             flex: 0 0 auto;
             height: 22px;
@@ -567,7 +569,7 @@
             border-radius: var(--radius);
             box-shadow: var(--card-shadow);
             padding: 22px;
-            transition: background-color 520ms ease, border-color 520ms ease, box-shadow 520ms ease;
+            transition: background-color var(--theme-fade), border-color var(--theme-fade), box-shadow var(--theme-fade);
         }
 
         .principle-card h3 {
@@ -615,7 +617,7 @@
             gap: 28px;
             grid-template-columns: 0.8fr 1.2fr;
             padding: 28px;
-            transition: background-color 520ms ease, border-color 520ms ease;
+            transition: background-color var(--theme-fade), border-color var(--theme-fade);
         }
 
         .about-band h2 {
@@ -667,7 +669,7 @@
             color: var(--muted);
             font-size: 14px;
             padding: 24px 0;
-            transition: border-color 520ms ease, color 520ms ease;
+            transition: border-color var(--theme-fade), color var(--theme-fade);
         }
 
         /* "Under the hood" layer: this page's own source surfaces behind the facade once the page turns dark. */
@@ -683,19 +685,19 @@
             --code-top: 100vh;
             --code-bottom: 100vh;
             --code-mask: linear-gradient(180deg, transparent 0, transparent var(--code-top), #000 calc(var(--code-top) + 180px), #000 calc(var(--code-bottom) - 240px), transparent var(--code-bottom));
-            -webkit-mask-image: var(--code-mask);
             inset: 0;
+            -webkit-mask-image: var(--code-mask);
             mask-image: var(--code-mask);
             opacity: calc(var(--code-reveal) * 0.2);
             overflow: hidden;
             pointer-events: none;
             position: fixed;
-            transition: opacity 520ms ease;
+            transition: opacity var(--theme-fade);
             user-select: none;
             z-index: 0;
         }
 
-        .code-layer__columns {
+        .code-columns {
             display: grid;
             gap: 56px;
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -705,13 +707,13 @@
             padding-inline: 32px;
         }
 
-        .code-layer__column {
+        .code-column {
             overflow: hidden;
         }
 
-        .code-layer__source {
+        .code-source {
             color: #94a3b8;
-            font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+            font-family: var(--font-mono);
             font-size: 13px;
             line-height: 1.75;
             margin: 0;
@@ -720,13 +722,38 @@
             will-change: transform;
         }
 
-        .code-layer .tok-kw { color: #7aa2f7; }
-        .code-layer .tok-str { color: #7dd3a7; }
-        .code-layer .tok-fn { color: #e5c07b; }
-        .code-layer .tok-type { color: #93c5fd; }
-        .code-layer .tok-ann { color: #f0a6b7; }
-        .code-layer .tok-num { color: #f4b183; }
-        .code-layer .tok-com { color: #64748b; font-style: italic; }
+        .code-layer .tok-comment {
+            color: #64748b;
+            font-style: italic;
+        }
+
+        .code-layer .tok-string {
+            color: #7dd3a7;
+        }
+
+        .code-layer .tok-tag {
+            color: #7aa2f7;
+        }
+
+        .code-layer .tok-keyword {
+            color: #7aa2f7;
+        }
+
+        .code-layer .tok-attr {
+            color: #93c5fd;
+        }
+
+        .code-layer .tok-prop {
+            color: #f0a6b7;
+        }
+
+        .code-layer .tok-number {
+            color: #f4b183;
+        }
+
+        .code-layer .tok-call {
+            color: #e5c07b;
+        }
 
         .code-caption {
             background: var(--surface);
@@ -734,10 +761,9 @@
             border-radius: 999px;
             bottom: 16px;
             color: var(--muted);
-            font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+            font-family: var(--font-mono);
             font-size: 11px;
             left: 16px;
-            letter-spacing: 0;
             opacity: 0;
             padding: 6px 12px;
             pointer-events: none;
@@ -757,26 +783,6 @@
             transform: none;
         }
 
-        @media (max-width: 720px) {
-            .code-layer__columns {
-                grid-template-columns: minmax(0, 1fr);
-                padding-inline: 16px;
-            }
-
-            .code-layer__column + .code-layer__column {
-                display: none;
-            }
-
-            .code-layer__source {
-                font-size: 11px;
-            }
-
-            /* On phones the badge would sit on top of card buttons. */
-            .code-caption {
-                display: none;
-            }
-        }
-
         @media (prefers-reduced-motion: reduce) {
             html {
                 scroll-behavior: auto;
@@ -785,8 +791,8 @@
             *,
             *::before,
             *::after {
-                transition-duration: 0.01ms !important;
                 transition-delay: 0ms !important;
+                transition-duration: 0.01ms !important;
             }
         }
 
@@ -811,6 +817,26 @@
 
             .project-card {
                 min-height: 0;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .code-columns {
+                grid-template-columns: minmax(0, 1fr);
+                padding-inline: 16px;
+            }
+
+            .code-column + .code-column {
+                display: none;
+            }
+
+            .code-source {
+                font-size: 11px;
+            }
+
+            /* On phones the badge would sit on top of card buttons. */
+            .code-caption {
+                display: none;
             }
         }
 
@@ -858,7 +884,7 @@
             }
 
             .contact-links {
-                justify-content: stretch;
+                justify-content: flex-start;
             }
 
             .stack-group {
@@ -875,12 +901,19 @@
 </head>
 <body>
     <div class="code-layer" aria-hidden="true">
-        <div class="code-layer__columns">
-            <div class="code-layer__column"><pre class="code-layer__source"></pre></div>
-            <div class="code-layer__column"><pre class="code-layer__source"></pre></div>
+        <div class="code-columns">
+            <div class="code-column"><pre class="code-source"></pre></div>
+            <div class="code-column"><pre class="code-source"></pre></div>
         </div>
     </div>
     <div class="code-caption" aria-hidden="true"></div>
+
+    <svg class="icon-sprite" aria-hidden="true">
+        <symbol id="icon-globe" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" d="M3.5 12a8.5 8.5 0 1 0 17 0 8.5 8.5 0 0 0-17 0Z"></path>
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" d="M4 12h16M12 3.5c2.2 2.2 3.3 5.03 3.3 8.5S14.2 18.3 12 20.5C9.8 18.3 8.7 15.47 8.7 12S9.8 5.7 12 3.5Z"></path>
+        </symbol>
+    </svg>
 
     <header class="site-header">
         <div class="page-shell nav">
@@ -898,7 +931,7 @@
         </div>
     </header>
 
-    <main id="top">
+    <main>
         <section class="page-shell hero" aria-labelledby="hero-title">
             <div>
                 <p class="eyebrow">Android engineer · Java → Kotlin · AI-assisted, engineer-owned</p>
@@ -950,27 +983,23 @@
             </a>
 
             <div class="project-grid">
-
                 <article class="project-card" id="project-codictio">
                     <div class="project-logo codictio">
-                        <img src="resources/Codictio_logo_vector.svg" alt="" aria-hidden="true">
+                        <img src="resources/Codictio_logo_vector.svg" alt="">
                     </div>
                     <h3>Codictio</h3>
                     <p>
                         A Windows dictation app that turns speech into clean structured text, removes filler words,
                         restores punctuation, and inserts the result into the active input field.
                     </p>
-                    <div class="tag-list" aria-label="Codictio topics">
-                        <span class="tag">Windows</span>
-                        <span class="tag">Dictation</span>
-                        <span class="tag">LLM cleanup</span>
-                    </div>
+                    <ul class="tag-list" aria-label="Codictio topics">
+                        <li class="tag">Windows</li>
+                        <li class="tag">Dictation</li>
+                        <li class="tag">LLM cleanup</li>
+                    </ul>
                     <div class="card-links">
                         <a class="platform-link website" href="https://codictio.pages.dev/" target="_blank" rel="noopener noreferrer" aria-label="Open Codictio website">
-                            <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true">
-                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" d="M3.5 12a8.5 8.5 0 1 0 17 0 8.5 8.5 0 0 0-17 0Z"></path>
-                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" d="M4 12h16M12 3.5c2.2 2.2 3.3 5.03 3.3 8.5S14.2 18.3 12 20.5C9.8 18.3 8.7 15.47 8.7 12S9.8 5.7 12 3.5Z"></path>
-                            </svg>
+                            <svg class="platform-icon" aria-hidden="true"><use href="#icon-globe"></use></svg>
                             <span>Website</span>
                         </a>
                     </div>
@@ -978,18 +1007,18 @@
 
                 <article class="project-card" id="project-no-chaos">
                     <div class="project-logo no-chaos">
-                        <img src="resources/No_Chaos_logo_vector.svg" alt="" aria-hidden="true">
+                        <img src="resources/No_Chaos_logo_vector.svg" alt="">
                     </div>
                     <h3>No Chaos</h3>
                     <p>
                         An ADHD-friendly daily routine app that shows one task at a time, supports voice capture,
                         and turns brain dumps into organized next steps with optional AI.
                     </p>
-                    <div class="tag-list" aria-label="No Chaos topics">
-                        <span class="tag">Android</span>
-                        <span class="tag">Productivity</span>
-                        <span class="tag">AI assist</span>
-                    </div>
+                    <ul class="tag-list" aria-label="No Chaos topics">
+                        <li class="tag">Android</li>
+                        <li class="tag">Productivity</li>
+                        <li class="tag">AI assist</li>
+                    </ul>
                     <div class="card-links">
                         <a class="platform-link google-play" href="https://play.google.com/store/apps/details?id=com.gmail.beprogressive.it.nochaos" target="_blank" rel="noopener noreferrer" aria-label="Open No Chaos on Google Play">
                             <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -1001,10 +1030,7 @@
                             <span>Google Play</span>
                         </a>
                         <a class="platform-link website" href="https://no-chaos.app" target="_blank" rel="noopener noreferrer" aria-label="Open No Chaos website">
-                            <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true">
-                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" d="M3.5 12a8.5 8.5 0 1 0 17 0 8.5 8.5 0 0 0-17 0Z"></path>
-                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" d="M4 12h16M12 3.5c2.2 2.2 3.3 5.03 3.3 8.5S14.2 18.3 12 20.5C9.8 18.3 8.7 15.47 8.7 12S9.8 5.7 12 3.5Z"></path>
-                            </svg>
+                            <svg class="platform-icon" aria-hidden="true"><use href="#icon-globe"></use></svg>
                             <span>Website</span>
                         </a>
                     </div>
@@ -1012,18 +1038,18 @@
 
                 <article class="project-card" id="project-is-connected">
                     <div class="project-logo is-connected">
-                        <img src="resources/isConnected_logo_vector.svg" alt="" aria-hidden="true">
+                        <img src="resources/isConnected_logo_vector.svg" alt="">
                     </div>
                     <h3>isConnected</h3>
                     <p>
                         A lightweight Windows tray utility that checks connectivity, shows clear offline warnings,
                         and can display current network speed without generating extra traffic.
                     </p>
-                    <div class="tag-list" aria-label="isConnected topics">
-                        <span class="tag">Windows tray</span>
-                        <span class="tag">Network</span>
-                        <span class="tag">Lightweight</span>
-                    </div>
+                    <ul class="tag-list" aria-label="isConnected topics">
+                        <li class="tag">Windows tray</li>
+                        <li class="tag">Network</li>
+                        <li class="tag">Lightweight</li>
+                    </ul>
                     <div class="card-links">
                         <a class="platform-link github" href="https://github.com/beprogressive/isConnected" target="_blank" rel="noopener noreferrer" aria-label="Open isConnected repository on GitHub">
                             <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -1032,10 +1058,7 @@
                             <span>GitHub</span>
                         </a>
                         <a class="platform-link website" href="https://beprogressive.github.io/isConnected/" target="_blank" rel="noopener noreferrer" aria-label="Open isConnected website">
-                            <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true">
-                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" d="M3.5 12a8.5 8.5 0 1 0 17 0 8.5 8.5 0 0 0-17 0Z"></path>
-                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" d="M4 12h16M12 3.5c2.2 2.2 3.3 5.03 3.3 8.5S14.2 18.3 12 20.5C9.8 18.3 8.7 15.47 8.7 12S9.8 5.7 12 3.5Z"></path>
-                            </svg>
+                            <svg class="platform-icon" aria-hidden="true"><use href="#icon-globe"></use></svg>
                             <span>Website</span>
                         </a>
                     </div>
@@ -1077,23 +1100,24 @@
                     </p>
                 </article>
             </div>
-            <div class="stack" aria-label="Technology stack">
+            <div class="stack">
                 <div class="stack-group">
-                    <span class="stack-label">Tech stack</span>
-                    <div class="tag-list">
-                        <span class="tag">Kotlin</span>
-                        <span class="tag">Java</span>
-                        <span class="tag">Android SDK</span>
-                        <span class="tag">Jetpack Compose</span>
-                        <span class="tag">Coroutines &amp; Flow</span>
-                        <span class="tag">MVVM / MVI</span>
-                        <span class="tag">Clean Architecture</span>
-                        <span class="tag">Windows</span>
-                        <span class="tag">Web / TypeScript</span>
-                    </div>
+                    <span class="stack-label" id="stack-label">Tech stack</span>
+                    <ul class="tag-list" aria-labelledby="stack-label">
+                        <li class="tag">Kotlin</li>
+                        <li class="tag">Java</li>
+                        <li class="tag">Android SDK</li>
+                        <li class="tag">Jetpack Compose</li>
+                        <li class="tag">Coroutines &amp; Flow</li>
+                        <li class="tag">MVVM / MVI</li>
+                        <li class="tag">Clean Architecture</li>
+                        <li class="tag">Windows</li>
+                        <li class="tag">Web / TypeScript</li>
+                    </ul>
                 </div>
             </div>
         </section>
+
         <section class="page-shell contact" id="contact" aria-labelledby="contact-title">
             <div>
                 <h2 id="contact-title">Get in touch</h2>
@@ -1112,7 +1136,9 @@
             &copy; 2026 beProgressive. Built with plain HTML and CSS.
         </div>
     </footer>
+
     <script>
+        // Light hero, dark everything else: the theme flips once the projects section reaches the upper half.
         (() => {
             const projectsSection = document.querySelector("#projects");
 
@@ -1165,6 +1191,7 @@
             window.addEventListener("resize", requestThemeUpdate);
         })();
     </script>
+
     <script>
         // "Under the hood": the real source of this very page surfaces behind it as it turns dark.
         (() => {
@@ -1179,7 +1206,7 @@
                 return;
             }
 
-            const [markupBlock, assetsBlock] = layer.querySelectorAll(".code-layer__source");
+            const [markupBlock, assetsBlock] = layer.querySelectorAll(".code-source");
             // Snapshot before anything is injected: the fallback when the page can't fetch itself (file://).
             const domSnapshot = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
             const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -1195,7 +1222,7 @@
                 /\b(const|let|return|new|true|false|null|function|async|await|else|typeof)\b/.source, // 7: keywords
                 /([a-zA-Z_$][\w$-]*(?=\())/.source,                               // 8: calls
             ].join("|"), "gm");
-            const KINDS = [null, "com", "str", "kw", "type", "ann", "num", "kw", "fn"];
+            const KINDS = [null, "comment", "string", "tag", "attr", "prop", "number", "keyword", "call"];
             const escapeHtml = (text) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
             // Tiny HTML/CSS/JS highlighter: enough for a background, not a parser.
@@ -1214,15 +1241,15 @@
             };
 
             const state = {
-                anchors: [],
-                focusY: 0,
-                isGliding: false,
-                shownLine: null,
-                targetLine: 0,
-                assetsLoopHeight: 0,
-                lineHeight: 0,
-                markupStartLine: 0,
                 ready: false,
+                anchors: [],
+                markupStartLine: 0,
+                lineHeight: 0,
+                assetsLoopHeight: 0,
+                focusY: 0,
+                targetLine: 0,
+                shownLine: null,
+                isGliding: false,
             };
             let isTicking = false;
 
@@ -1230,7 +1257,7 @@
             // The sticky header is left out: its top never moves, which would break the ordering.
             const buildAnchors = (markupLines) => {
                 const landmarks = document.querySelectorAll(
-                    "main > section, .project-banner, .project-card, .about-band, .principle-card, .stack, body > footer"
+                    "main > section, .game-banner, .project-card, .about-band, .principle-card, .stack, body > footer"
                 );
                 const anchors = [];
                 let searchFrom = 0;
@@ -1238,12 +1265,13 @@
                 landmarks.forEach((element) => {
                     const tag = "<" + element.tagName.toLowerCase();
                     const marker = element.id ? 'id="' + element.id + '"' : 'class="' + element.getAttribute("class") + '"';
-                    for (let line = searchFrom; line < markupLines.length; line += 1) {
-                        if (markupLines[line].includes(tag) && markupLines[line].includes(marker)) {
-                            anchors.push({ element, line });
-                            searchFrom = line + 1;
-                            break;
-                        }
+                    const offset = markupLines
+                        .slice(searchFrom)
+                        .findIndex((text) => text.includes(tag) && text.includes(marker));
+
+                    if (offset >= 0) {
+                        anchors.push({ element, line: searchFrom + offset });
+                        searchFrom += offset + 1;
                     }
                 });
 
@@ -1253,12 +1281,13 @@
             const render = (source) => {
                 const lines = source.replace(/\r\n/g, "\n").split("\n");
                 const bodyStart = lines.findIndex((line) => /<body[\s>]/.test(line));
-                const bodyScripts = lines.findIndex((line, index) => index > bodyStart && /<script[\s>]/.test(line));
-                const bodyEnd = bodyScripts > bodyStart ? bodyScripts : lines.length;
 
                 if (bodyStart < 0) {
                     return;
                 }
+
+                const bodyScripts = lines.findIndex((line, index) => index > bodyStart && /<script[\s>]/.test(line));
+                const bodyEnd = bodyScripts > bodyStart ? bodyScripts : lines.length;
 
                 const markupLines = lines.slice(bodyStart, bodyEnd);
                 const assets = lines.slice(0, bodyStart).concat(lines.slice(bodyEnd)).join("\n");
