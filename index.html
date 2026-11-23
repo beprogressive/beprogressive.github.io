@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="beProgressive portfolio: software, Windows utilities, Android apps, AI-assisted tools.">
+    <meta name="description" content="beProgressive: Android engineer with 10+ years of experience (Java, then Kotlin) building Android apps, Windows utilities and AI-assisted tools.">
     <title>beProgressive - Portfolio</title>
     <style>
         :root {
@@ -555,6 +555,58 @@
             width: 22px;
         }
 
+        .principle-grid {
+            display: grid;
+            gap: 18px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .principle-card {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: var(--card-shadow);
+            padding: 22px;
+            transition: background-color 520ms ease, border-color 520ms ease, box-shadow 520ms ease;
+        }
+
+        .principle-card h3 {
+            font-size: 19px;
+            line-height: 1.25;
+            margin-bottom: 8px;
+        }
+
+        .principle-card p {
+            color: var(--muted);
+            margin-bottom: 0;
+        }
+
+        .stack {
+            display: grid;
+            gap: 14px;
+            margin-top: 24px;
+        }
+
+        .stack-group {
+            align-items: center;
+            display: flex;
+            gap: 14px;
+        }
+
+        .stack-label {
+            color: var(--green);
+            flex: 0 0 112px;
+            font-size: 13px;
+            font-weight: 760;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        /* Stack tags sit inline with their label, so the card-footer spacing does not apply. */
+        .stack .tag-list {
+            margin: 0;
+        }
+
         .about-band {
             background: var(--about-bg);
             border: 1px solid var(--about-line);
@@ -640,7 +692,8 @@
                 min-height: 0;
             }
 
-            .project-grid {
+            .project-grid,
+            .principle-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -695,6 +748,16 @@
             .contact-links {
                 justify-content: stretch;
             }
+
+            .stack-group {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .stack-label {
+                flex-basis: auto;
+            }
         }
     </style>
 </head>
@@ -709,6 +772,7 @@
             </a>
             <nav class="nav-links" aria-label="Primary navigation">
                 <a href="#projects">Projects</a>
+                <a href="#approach">How I work</a>
                 <a href="#about">About</a>
                 <a href="#contact">Contact</a>
             </nav>
@@ -718,11 +782,12 @@
     <main id="top">
         <section class="page-shell hero" aria-labelledby="hero-title">
             <div>
-                <p class="eyebrow">Software, utilities, calm product thinking</p>
+                <p class="eyebrow">Android engineer · Java → Kotlin · AI-assisted, engineer-owned</p>
                 <h1 id="hero-title">Small tools for clearer everyday workflows.</h1>
                 <p class="lead">
-                    I build practical apps and services that reduce friction: focused Android tools,
-                    native Windows utilities, and AI-assisted software that keeps user intent intact.
+                    I started out as a Java developer, moved to Kotlin, and have spent 10+ years building Android apps.
+                    Today I ship products beyond Android too, from Windows utilities to web tools, using AI to move
+                    into new platforms faster while keeping the same engineering standards.
                 </p>
                 <div class="hero-actions">
                     <a class="button button-primary" href="#projects">View projects</a>
@@ -746,8 +811,8 @@
                     </div>
                 </div>
                 <div class="hero-note">
-                    <strong>Designed around real constraints.</strong>
-                    <p>Lightweight, privacy-aware products with simple interfaces and a clear reason to exist.</p>
+                    <strong>beProgressive is not just a name.</strong>
+                    <p>I've never been a "we've always done it this way" developer. New languages, new frameworks. I adopt what genuinely improves the work and drop what doesn't.</p>
                 </div>
             </aside>
         </section>
@@ -859,12 +924,68 @@
             </div>
         </section>
 
+        <section class="page-shell section" id="approach" aria-labelledby="approach-title">
+            <div class="section-heading">
+                <h2 id="approach-title">Engineering first. AI as a power tool.</h2>
+                <p>How I build products, and why the code behind them holds up.</p>
+            </div>
+            <div class="principle-grid">
+                <article class="principle-card">
+                    <h3>10+ years of engineering behind it</h3>
+                    <p>
+                        Java first, then Kotlin, with Android at the core. That's why I can read what an AI writes,
+                        spot where it's wrong and keep the architecture sound.
+                    </p>
+                </article>
+                <article class="principle-card">
+                    <h3>Architecture before code</h3>
+                    <p>
+                        Clean Architecture, SOLID, MVVM and MVI. Clear layers, so features can change without rewrites.
+                    </p>
+                </article>
+                <article class="principle-card">
+                    <h3>New platforms, same standards</h3>
+                    <p>
+                        Outside Android, AI helps me pick up unfamiliar stacks quickly. The design decisions, the review
+                        and the responsibility for the result are still mine.
+                    </p>
+                </article>
+                <article class="principle-card">
+                    <h3>Quality you don't see in a demo</h3>
+                    <p>
+                        Error and offline states, lifecycle, performance, privacy, tests where they matter.
+                    </p>
+                </article>
+            </div>
+            <div class="stack" aria-label="Technology stack">
+                <div class="stack-group">
+                    <span class="stack-label">Core</span>
+                    <div class="tag-list">
+                        <span class="tag">Kotlin</span>
+                        <span class="tag">Java</span>
+                        <span class="tag">Android SDK</span>
+                        <span class="tag">Jetpack Compose</span>
+                        <span class="tag">Coroutines &amp; Flow</span>
+                        <span class="tag">MVVM / MVI</span>
+                        <span class="tag">Clean Architecture</span>
+                    </div>
+                </div>
+                <div class="stack-group">
+                    <span class="stack-label">AI-assisted</span>
+                    <div class="tag-list">
+                        <span class="tag">Windows</span>
+                        <span class="tag">Web / TypeScript</span>
+                    </div>
+                </div>
+            </div>
+        </section>
         <section class="page-shell section" id="about" aria-labelledby="about-title">
             <div class="about-band">
                 <h2 id="about-title">Pragmatic software with a clear interface.</h2>
                 <p class="about-copy">
                     I care about tools that get out of the way: clear states, privacy-respecting defaults,
                     and enough automation to make hard tasks easier without taking control away from the person using it.
+                    Under the hood it's the same engineering discipline I've built over a decade, just with better tools.
                 </p>
             </div>
         </section>
