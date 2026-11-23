@@ -1398,7 +1398,7 @@
             new MutationObserver(requestUpdate).observe(document.body, { attributes: true, attributeFilter: ["class"] });
 
             // Same bytes as view-source: the HTML the server actually sent, not the live DOM.
-            fetch(window.location.href.split("#")[0], { cache: "force-cache" })
+            fetch(window.location.href.split("#")[0], { cache: "default" })
                 .then((response) => (response.ok ? response.text() : Promise.reject(response.status)))
                 .catch(() => domSnapshot)
                 .then(render);
