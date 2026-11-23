@@ -1215,6 +1215,10 @@
 
             const state = {
                 anchors: [],
+                focusY: 0,
+                isGliding: false,
+                shownLine: null,
+                targetLine: 0,
                 assetsLoopHeight: 0,
                 lineHeight: 0,
                 markupStartLine: 0,
@@ -1223,9 +1227,10 @@
             let isTicking = false;
 
             // Maps landmark elements to the line where their opening tag lives in the markup.
+            // The sticky header is left out: its top never moves, which would break the ordering.
             const buildAnchors = (markupLines) => {
                 const landmarks = document.querySelectorAll(
-                    "body > header, main > section, .project-banner, .project-card, .about-band, .principle-card, .stack, body > footer"
+                    "main > section, .project-banner, .project-card, .about-band, .principle-card, .stack, body > footer"
                 );
                 const anchors = [];
                 let searchFrom = 0;
@@ -1277,24 +1282,47 @@
 
             // Fractional markup line that belongs to the given viewport y.
             const lineAt = (focusY) => {
-                const { anchors } = state;
-                if (anchors.length === 0) {
+                // Cards in one grid row share a top edge; keep the first one so the code flows instead of jumping.
+                const points = [];
+                state.anchors.forEach(({ element, line }) => {
+                    const top = element.getBoundingClientRect().top;
+                    const last = points[points.length - 1];
+                    if (!last || top - last.top > 4) {
+                        points.push({ top, line });
+                    }
+                });
+
+                if (points.length === 0) {
                     return 0;
                 }
 
-                const tops = anchors.map(({ element }) => element.getBoundingClientRect().top);
                 let index = 0;
-                while (index < anchors.length - 1 && tops[index + 1] <= focusY) {
+                while (index < points.length - 1 && points[index + 1].top <= focusY) {
                     index += 1;
                 }
 
-                const next = anchors[index + 1];
+                const current = points[index];
+                const next = points[index + 1];
                 if (!next) {
-                    return anchors[index].line;
+                    return current.line;
                 }
 
-                const progress = clamp((focusY - tops[index]) / Math.max(1, tops[index + 1] - tops[index]));
-                return anchors[index].line + progress * (next.line - anchors[index].line);
+                const progress = clamp((focusY - current.top) / Math.max(1, next.top - current.top));
+                return current.line + progress * (next.line - current.line);
+            };
+
+            // Eases the markup column toward its target line, so jumps (nav clicks, fast flicks) glide.
+            const animateMarkup = () => {
+                const distance = state.targetLine - state.shownLine;
+                state.shownLine = Math.abs(distance) < 0.02 ? state.targetLine : state.shownLine + distance * 0.16;
+
+                const markupOffset = state.focusY - (state.shownLine + 0.5) * state.lineHeight;
+                markupBlock.style.transform = "translate3d(0, " + markupOffset.toFixed(1) + "px, 0)";
+
+                state.isGliding = state.shownLine !== state.targetLine;
+                if (state.isGliding) {
+                    window.requestAnimationFrame(animateMarkup);
+                }
             };
 
             const update = () => {
@@ -1334,8 +1362,14 @@
                 }
 
                 // Markup column tracks the section in view: the code under a card is that card's code.
-                const markupOffset = focusY - (line + 0.5) * state.lineHeight;
-                markupBlock.style.transform = "translate3d(0, " + markupOffset.toFixed(1) + "px, 0)";
+                state.focusY = focusY;
+                state.targetLine = line;
+                if (state.shownLine === null) {
+                    state.shownLine = line;
+                }
+                if (!state.isGliding) {
+                    animateMarkup();
+                }
 
                 const assetsOffset = state.assetsLoopHeight > 0 ? (window.scrollY * 0.3) % state.assetsLoopHeight : 0;
                 assetsBlock.style.transform = "translate3d(0, " + (-assetsOffset).toFixed(1) + "px, 0)";
