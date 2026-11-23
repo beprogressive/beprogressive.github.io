@@ -371,11 +371,11 @@
             scroll-margin-top: 104px;
         }
 
+        /* Subtitle stacks under the title so multi-line headings stay visually anchored. */
         .section-heading {
-            align-items: end;
             display: flex;
-            gap: 24px;
-            justify-content: space-between;
+            flex-direction: column;
+            gap: 10px;
             margin-bottom: 24px;
         }
 
@@ -389,7 +389,7 @@
         .section-heading p {
             color: var(--muted);
             margin-bottom: 0;
-            max-width: 430px;
+            max-width: 640px;
         }
 
         .game-banner {
