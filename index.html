@@ -624,6 +624,11 @@
             margin-bottom: 0;
         }
 
+        /* The green intro band sits above the principle cards, so it needs its own gap. */
+        .approach-intro {
+            margin-bottom: 18px;
+        }
+
         .about-copy {
             color: var(--about-copy);
             margin-bottom: 0;
@@ -773,7 +778,6 @@
             <nav class="nav-links" aria-label="Primary navigation">
                 <a href="#projects">Projects</a>
                 <a href="#approach">How I work</a>
-                <a href="#about">About</a>
                 <a href="#contact">Contact</a>
             </nav>
         </div>
@@ -925,9 +929,9 @@
         </section>
 
         <section class="page-shell section" id="approach" aria-labelledby="approach-title">
-            <div class="section-heading">
+            <div class="about-band approach-intro">
                 <h2 id="approach-title">10+ years of engineering behind it</h2>
-                <p>
+                <p class="about-copy">
                     I started my journey in development long before the AI era, by learning Java, and Android
                     became my home. Later I fell in love with Kotlin and moved all my work to its stack. Years of
                     writing code by hand give me an edge with AI tools: I can read what an AI writes, spot where
@@ -980,17 +984,6 @@
                 </div>
             </div>
         </section>
-        <section class="page-shell section" id="about" aria-labelledby="about-title">
-            <div class="about-band">
-                <h2 id="about-title">Pragmatic software with a clear interface.</h2>
-                <p class="about-copy">
-                    I care about tools that get out of the way: clear states, privacy-respecting defaults,
-                    and enough automation to make hard tasks easier without taking control away from the person using it.
-                    Under the hood it's the same engineering discipline I've built over a decade, just with better tools.
-                </p>
-            </div>
-        </section>
-
         <section class="page-shell contact" id="contact" aria-labelledby="contact-title">
             <div>
                 <h2 id="contact-title">Let's build something worthwhile.</h2>
