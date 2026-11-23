@@ -679,9 +679,12 @@
 
         .code-layer {
             --code-reveal: 0;
-            -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 90%, transparent 100%);
+            /* --code-top keeps the hero untouched: code only surfaces below the hero's bottom edge. */
+            --code-top: 100vh;
+            --code-mask: linear-gradient(180deg, transparent 0, transparent var(--code-top), #000 calc(var(--code-top) + 180px), #000 90%, transparent 100%);
+            -webkit-mask-image: var(--code-mask);
             inset: 0;
-            mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 90%, transparent 100%);
+            mask-image: var(--code-mask);
             opacity: calc(var(--code-reveal) * 0.2);
             overflow: hidden;
             pointer-events: none;
@@ -1130,10 +1133,11 @@
         // "Under the hood": original Kotlin sources that surface behind the page as it turns dark.
         (() => {
             const layer = document.querySelector(".code-layer");
+            const heroSection = document.querySelector(".hero");
             const projectsSection = document.querySelector("#projects");
             const approachSection = document.querySelector("#approach");
 
-            if (!layer || !projectsSection || !approachSection) {
+            if (!layer || !heroSection || !projectsSection || !approachSection) {
                 return;
             }
 
@@ -1417,7 +1421,9 @@ data class ProjectDto(
                 const remaining = approachTop - viewport * 0.5;
                 const depth = clamp(travelled / Math.max(1, travelled + remaining));
                 const reveal = isDark ? 0.45 + 0.55 * depth : 0;
+                const heroBottom = Math.max(0, heroSection.getBoundingClientRect().bottom);
                 layer.style.setProperty("--code-reveal", reveal.toFixed(3));
+                layer.style.setProperty("--code-top", Math.min(heroBottom, viewport).toFixed(0) + "px");
 
                 if (reduceMotion.matches) {
                     blocks.forEach(({ element }) => { element.style.transform = ""; });
