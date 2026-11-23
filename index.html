@@ -679,9 +679,10 @@
 
         .code-layer {
             --code-reveal: 0;
-            /* --code-top keeps the hero untouched: code only surfaces below the hero's bottom edge. */
+            /* Code lives between the hero's bottom edge (--code-top) and the contact block (--code-bottom). */
             --code-top: 100vh;
-            --code-mask: linear-gradient(180deg, transparent 0, transparent var(--code-top), #000 calc(var(--code-top) + 180px), #000 90%, transparent 100%);
+            --code-bottom: 100vh;
+            --code-mask: linear-gradient(180deg, transparent 0, transparent var(--code-top), #000 calc(var(--code-top) + 180px), #000 calc(var(--code-bottom) - 240px), transparent var(--code-bottom));
             -webkit-mask-image: var(--code-mask);
             inset: 0;
             mask-image: var(--code-mask);
@@ -1136,8 +1137,9 @@
             const heroSection = document.querySelector(".hero");
             const projectsSection = document.querySelector("#projects");
             const approachSection = document.querySelector("#approach");
+            const contactSection = document.querySelector("#contact");
 
-            if (!layer || !heroSection || !projectsSection || !approachSection) {
+            if (!layer || !heroSection || !projectsSection || !approachSection || !contactSection) {
                 return;
             }
 
@@ -1424,6 +1426,9 @@ data class ProjectDto(
                 const heroBottom = Math.max(0, heroSection.getBoundingClientRect().bottom);
                 layer.style.setProperty("--code-reveal", reveal.toFixed(3));
                 layer.style.setProperty("--code-top", Math.min(heroBottom, viewport).toFixed(0) + "px");
+                // Contact has no card background, so the code fades out before it.
+                const contactTop = contactSection.getBoundingClientRect().top + 24;
+                layer.style.setProperty("--code-bottom", Math.max(0, Math.min(contactTop, viewport)).toFixed(0) + "px");
 
                 if (reduceMotion.matches) {
                     blocks.forEach(({ element }) => { element.style.transform = ""; });
