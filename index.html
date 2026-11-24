@@ -1216,6 +1216,9 @@
             const CHUNK_LINES = 12;
             // How lazily the markup column catches up with the scroll; larger is slower.
             const GLIDE_TIME_MS = 220;
+            const TOP_EDGE = 96;
+            const TOP_FADE = 220;
+            const TOP_DIM = "rgba(0, 0, 0, 0.35)";
 
             const TOKEN = new RegExp([
                 /(<!--[\s\S]*?-->|\/\*[\s\S]*?\*\/|\/\/[^\n]*)/.source,           // 1: comments
@@ -1432,9 +1435,11 @@
                 const reveal = isDark && state.ready ? 0.45 + 0.55 * depth : 0;
                 const codeBottom = Math.max(0, Math.min(contactTop, viewport));
 
-                // Soft edge under the header; contact has no card background, so the code fades out before it.
-                const mask = "linear-gradient(180deg, transparent 0, #000 180px, #000 " + (codeBottom - 240).toFixed(0)
-                    + "px, transparent " + codeBottom.toFixed(0) + "px)";
+                // Dimmed under the header and the hero, full strength below them; faded out again before contact.
+                const dimEnd = Math.max(TOP_EDGE, Math.round((heroBottom - TOP_FADE / 2) / 12) * 12);
+                const mask = "linear-gradient(180deg, transparent 0, " + TOP_DIM + " " + TOP_EDGE + "px, "
+                    + TOP_DIM + " " + dimEnd + "px, #000 " + (dimEnd + TOP_FADE) + "px, #000 "
+                    + (codeBottom - 240).toFixed(0) + "px, transparent " + codeBottom.toFixed(0) + "px)";
 
                 // Plain properties, not inherited custom properties: changing those restyled every span each frame.
                 layer.style.opacity = (reveal * state.maxOpacity).toFixed(3);
