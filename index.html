@@ -679,16 +679,11 @@
             z-index: 1;
         }
 
+        /* Opacity and the mask between the hero and the contact block are set by the script below. */
         .code-layer {
-            --code-reveal: 0;
-            /* Code lives between the hero's bottom edge (--code-top) and the contact block (--code-bottom). */
-            --code-top: 100vh;
-            --code-bottom: 100vh;
-            --code-mask: linear-gradient(180deg, transparent 0, transparent var(--code-top), #000 calc(var(--code-top) + 180px), #000 calc(var(--code-bottom) - 240px), transparent var(--code-bottom));
+            --code-max-opacity: 0.3;
             inset: 0;
-            -webkit-mask-image: var(--code-mask);
-            mask-image: var(--code-mask);
-            opacity: calc(var(--code-reveal) * 0.2);
+            opacity: 0;
             overflow: hidden;
             pointer-events: none;
             position: fixed;
@@ -828,6 +823,10 @@
 
             .code-column + .code-column {
                 display: none;
+            }
+
+            .code-layer {
+                --code-max-opacity: 0.4;
             }
 
             .code-source {
@@ -1211,8 +1210,15 @@
             const domSnapshot = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
             const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
             const clamp = (value) => Math.min(1, Math.max(0, value));
+            const translateY = (px) => "translate3d(0, " + px.toFixed(1) + "px, 0)";
+            // Lines kept in the DOM above and below the viewport; the slice is re-rendered in steps of CHUNK_LINES.
+            const BUFFER_LINES = 24;
+            const CHUNK_LINES = 12;
             // How lazily the markup column catches up with the scroll; larger is slower.
             const GLIDE_TIME_MS = 220;
+            const TOP_EDGE = 96;
+            const TOP_FADE = 220;
+            const TOP_DIM = "rgba(0, 0, 0, 0.35)";
 
             const TOKEN = new RegExp([
                 /(<!--[\s\S]*?-->|\/\*[\s\S]*?\*\/|\/\/[^\n]*)/.source,           // 1: comments
@@ -1226,6 +1232,20 @@
             ].join("|"), "gm");
             const KINDS = [null, "comment", "string", "tag", "attr", "prop", "number", "keyword", "call"];
             const escapeHtml = (text) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+            // Splits highlighted HTML into lines, closing and reopening a span that crosses a line break.
+            const splitLines = (html) => {
+                const lines = [];
+                let openTag = "";
+                html.split("\n").forEach((line) => {
+                    const text = openTag + line;
+                    const lastOpen = text.lastIndexOf("<span");
+                    const lastClose = text.lastIndexOf("</span>");
+                    openTag = lastOpen > lastClose ? text.slice(lastOpen, text.indexOf(">", lastOpen) + 1) : "";
+                    lines.push(openTag ? text + "</span>" : text);
+                });
+                return lines;
+            };
 
             // Tiny HTML/CSS/JS highlighter: enough for a background, not a parser.
             const highlight = (source) => {
@@ -1247,7 +1267,8 @@
                 anchors: [],
                 markupStartLine: 0,
                 lineHeight: 0,
-                assetsLoopHeight: 0,
+                maxOpacity: 0.3,
+                mask: "",
                 focusY: 0,
                 targetLine: 0,
                 shownLine: null,
@@ -1255,6 +1276,42 @@
                 lastFrame: null,
             };
             let isTicking = false;
+
+            // Thousands of highlighted spans are cheap in memory but not in the DOM: the theme switch restyles
+            // and the first reveal paints all of them. So each column only renders the lines on screen.
+            const columns = [
+                { element: markupBlock, lines: [], start: null, wrap: false },
+                { element: assetsBlock, lines: [], start: null, wrap: true },
+            ];
+            const [markupColumn, assetsColumn] = columns;
+
+            const lineOf = (column, index) => {
+                const total = column.lines.length;
+                if (column.wrap) {
+                    return column.lines[((index % total) + total) % total];
+                }
+                return column.lines[index] ?? "";
+            };
+
+            // Places the column so that the (fractional) line `firstLine` sits at the top of the viewport.
+            const showFrom = (column, firstLine) => {
+                if (column.lines.length === 0) {
+                    return;
+                }
+
+                const start = Math.floor((Math.floor(firstLine) - BUFFER_LINES) / CHUNK_LINES) * CHUNK_LINES;
+                if (start !== column.start) {
+                    const count = Math.ceil(window.innerHeight / state.lineHeight) + BUFFER_LINES * 2 + CHUNK_LINES;
+                    const slice = [];
+                    for (let index = start; index < start + count; index += 1) {
+                        slice.push(lineOf(column, index));
+                    }
+                    column.element.innerHTML = slice.join("\n");
+                    column.start = start;
+                }
+
+                column.element.style.transform = translateY((start - firstLine) * state.lineHeight);
+            };
 
             // Maps landmark elements to the line where their opening tag lives in the markup.
             // The sticky header is left out: its top never moves, which would break the ordering.
@@ -1294,11 +1351,10 @@
 
                 const markupLines = lines.slice(bodyStart, bodyEnd);
                 const assets = lines.slice(0, bodyStart).concat(lines.slice(bodyEnd)).join("\n");
-                const assetsHtml = highlight(assets);
 
-                markupBlock.innerHTML = highlight(markupLines.join("\n"));
-                // Two copies let the assets column loop seamlessly with a modulo offset.
-                assetsBlock.innerHTML = assetsHtml + "\n" + assetsHtml;
+                markupColumn.lines = splitLines(highlight(markupLines.join("\n")));
+                // The assets column wraps around, so it loops endlessly with the parallax.
+                assetsColumn.lines = splitLines(highlight(assets));
 
                 state.anchors = buildAnchors(markupLines);
                 state.markupStartLine = bodyStart;
@@ -1309,7 +1365,11 @@
 
             const measure = () => {
                 state.lineHeight = parseFloat(getComputedStyle(markupBlock).lineHeight) || 20;
-                state.assetsLoopHeight = assetsBlock.scrollHeight / 2;
+                state.maxOpacity = parseFloat(getComputedStyle(layer).getPropertyValue("--code-max-opacity")) || 0.3;
+                // The visible line count depends on the viewport, so slices are rebuilt after a resize.
+                columns.forEach((column) => {
+                    column.start = null;
+                });
             };
 
             // Fractional markup line that belongs to the given viewport y.
@@ -1351,8 +1411,7 @@
                 const distance = state.targetLine - state.shownLine;
                 state.shownLine = Math.abs(distance) < 0.02 ? state.targetLine : state.shownLine + distance * step;
 
-                const markupOffset = state.focusY - (state.shownLine + 0.5) * state.lineHeight;
-                markupBlock.style.transform = "translate3d(0, " + markupOffset.toFixed(1) + "px, 0)";
+                showFrom(markupColumn, state.shownLine + 0.5 - state.focusY / state.lineHeight);
 
                 state.isGliding = state.shownLine !== state.targetLine;
                 state.lastFrame = state.isGliding ? now : null;
@@ -1376,10 +1435,19 @@
                 const reveal = isDark && state.ready ? 0.45 + 0.55 * depth : 0;
                 const codeBottom = Math.max(0, Math.min(contactTop, viewport));
 
-                layer.style.setProperty("--code-reveal", reveal.toFixed(3));
-                layer.style.setProperty("--code-top", Math.min(heroBottom, viewport).toFixed(0) + "px");
-                // Contact has no card background, so the code fades out before it.
-                layer.style.setProperty("--code-bottom", codeBottom.toFixed(0) + "px");
+                // Dimmed under the header and the hero, full strength below them; faded out again before contact.
+                const dimEnd = Math.max(TOP_EDGE, Math.round((heroBottom - TOP_FADE / 2) / 12) * 12);
+                const mask = "linear-gradient(180deg, transparent 0, " + TOP_DIM + " " + TOP_EDGE + "px, "
+                    + TOP_DIM + " " + dimEnd + "px, #000 " + (dimEnd + TOP_FADE) + "px, #000 "
+                    + (codeBottom - 240).toFixed(0) + "px, transparent " + codeBottom.toFixed(0) + "px)";
+
+                // Plain properties, not inherited custom properties: changing those restyled every span each frame.
+                layer.style.opacity = (reveal * state.maxOpacity).toFixed(3);
+                if (state.mask !== mask) {
+                    layer.style.webkitMaskImage = mask;
+                    layer.style.maskImage = mask;
+                    state.mask = mask;
+                }
 
                 if (!state.ready) {
                     return;
@@ -1392,8 +1460,8 @@
                 caption.dataset.line = String(state.markupStartLine + Math.round(line) + 1);
 
                 if (reduceMotion.matches) {
-                    markupBlock.style.transform = "";
-                    assetsBlock.style.transform = "";
+                    showFrom(markupColumn, 0);
+                    showFrom(assetsColumn, 0);
                     return;
                 }
 
@@ -1407,8 +1475,7 @@
                     animateMarkup();
                 }
 
-                const assetsOffset = state.assetsLoopHeight > 0 ? (window.scrollY * 0.3) % state.assetsLoopHeight : 0;
-                assetsBlock.style.transform = "translate3d(0, " + (-assetsOffset).toFixed(1) + "px, 0)";
+                showFrom(assetsColumn, (window.scrollY * 0.3) / state.lineHeight);
             };
 
             const requestUpdate = () => {
